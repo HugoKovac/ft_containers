@@ -1,13 +1,9 @@
-#include <vector>
 #include <memory>
-#include <iterator>
 #include <stdexcept>
 #include "enable_if.hpp"
 #include "is_integral.hpp"
 #include "compare.hpp"
 #include "iterator.hpp"
-
-#include <iostream>
 
 namespace ft{
 template < class T, class Alloc = std::allocator<T> >

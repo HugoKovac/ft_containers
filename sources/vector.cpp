@@ -1,4 +1,5 @@
 #include "define_main.hpp"
+#include <vector>
 
 template <class vec>
 void printDataVector(vec begin, vec end){
