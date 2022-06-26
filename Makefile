@@ -24,7 +24,7 @@ clean:
 	rm -f $(OBJS)
 
 fclean: clean
-	rm -rf $(NAME) exec .vscode
+	rm -rf $(NAME) exec .vscode *.tmp
 
 re: fclean $(NAME)
 

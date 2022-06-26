@@ -64,7 +64,7 @@ class vector{
 		if (x == *this)
 			return *this;
 		clear();
-		insert(this->end(), x.begin(), x.end());
+		assign(x.begin(), x.end());
 		return *this;
 	}
 

@@ -195,4 +195,16 @@ void vector_test(void){
 	PRINT_SC(tmp);
 	printDataVector(tmp.begin(), tmp.end());
 }
+{
+	__NS::vector<int> tmp(10, 10);
+	tmp = v1;
+	PRINT_SC(tmp);
+	printDataVector(tmp.begin(), tmp.end());
+}
+{
+	__NS::vector<int> tmp(10, 10);
+	v1.insert(v1.begin(), tmp.begin(), tmp.end());//seg fault
+	PRINT_SC(tmp);
+	printDataVector(tmp.begin(), tmp.end());
+}
 }
