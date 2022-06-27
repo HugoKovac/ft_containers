@@ -26,5 +26,6 @@
 
 void vector_test(void);
 void map_test(void);
+void pair_test(void);
 
 #endif
