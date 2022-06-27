@@ -12,6 +12,7 @@
 #endif
 
 #include "vector.hpp"
+#include "map.hpp"
 
 #define COLOR_RED "\x1B[31m"
 #define COLOR_MAG "\x1B[35m"
