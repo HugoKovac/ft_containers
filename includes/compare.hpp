@@ -1,3 +1,6 @@
+#if !defined(COMAPRE_HPP)
+#define COMAPRE_HPP
+
 /*equal*/
 namespace ft{
 template <class InputIterator1, class InputIterator2>
@@ -53,3 +56,4 @@ bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1, Input
 }
 }
 /*end of lexicocmp*/
+#endif // COMAPRE_HPP

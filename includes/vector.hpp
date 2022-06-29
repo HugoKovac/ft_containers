@@ -1,3 +1,6 @@
+#if !defined(VECTOR_HPP)
+#define VECTOR_HPP
+
 #include <memory>
 #include <stdexcept>
 #include "enable_if.hpp"
@@ -338,3 +341,5 @@ void swap (vector<T,Alloc>& x, vector<T,Alloc>& y){
 }
 
 }
+
+#endif // VECTOR_HPP

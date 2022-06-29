@@ -1,3 +1,5 @@
+#if !defined(IS_INTEGRAL_HPP)
+#define IS_INTEGRAL_HPP
 /*is_itegral*/
 namespace ft
 {
@@ -61,3 +63,4 @@ template <class T>
 struct is_integral : public is_integral_spec<T>{};
 }
 /*End of is itergal*/
+#endif // IS_INTEGRAL_HPP
