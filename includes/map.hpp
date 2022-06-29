@@ -54,14 +54,18 @@ template < class Key,										// map::key_type
 		_Node(const Key key, T const data) : color(RED), pair(key, data), next(NULL){}
 		_Node(const Key key, T const data, char color, T* next) : color(color), pair(key, data), next(next){}
 	};
+	
 	_Node *root;
 	allocator_type		_alloc;
 	key_compare			_comp;
 
 	explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-	: _comp(comp), _alloc(alloc), _Node(NULL){
+	: _comp(comp), _alloc(alloc), _Node(NULL){}
 
-	}
+	// pair<iterator,bool> insert (const value_type& val){
+		
+	// }
+
 
 };
 
