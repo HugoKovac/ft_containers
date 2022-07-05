@@ -2,8 +2,8 @@
 
 int main(){
 	vector_test();
-	map_test();
 	pair_test();
+	map_test();
 	
 	return 0;
 }

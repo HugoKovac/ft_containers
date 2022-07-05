@@ -54,36 +54,6 @@ namespace ft
 	private :
 		pointer _ptr;
 	};
-		/*VectorIter operators*/
-	// template <class Iterator>
-	// bool operator== (const VectorIter<Iterator>& lhs, const VectorIter<Iterator>& rhs){
-	// 	return (lhs.base() == rhs.base());
-	// }
-
-	// template <class Iterator>
-	// bool operator!= (const VectorIter<Iterator>& lhs, const VectorIter<Iterator>& rhs){
-	// 	return (lhs.base() != rhs.base());
-	// }
-
-	// template <class Iterator>
-	// bool operator<  (const VectorIter<Iterator>& lhs, const VectorIter<Iterator>& rhs){
-	// 	return (lhs.base() > rhs.base());
-	// }
-
-	// template <class Iterator>
-	// bool operator<= (const VectorIter<Iterator>& lhs, const VectorIter<Iterator>& rhs){
-	// 	return (lhs.base() >= rhs.base());
-	// }
-
-	// template <class Iterator>
-	// bool operator>  (const VectorIter<Iterator>& lhs, const VectorIter<Iterator>& rhs){
-	// 	return (lhs.base() < rhs.base());
-	// }
-
-	// template <class Iterator>
-	// bool operator>= (const VectorIter<Iterator>& lhs, const VectorIter<Iterator>& rhs){
-	// 	return (lhs.base() <= rhs.base());
-	// }
 
 	template <class Iterator>
 	VectorIter<Iterator> operator+ ( typename VectorIter<Iterator>::difference_type n, const VectorIter<Iterator>& rev_it){
@@ -203,6 +173,31 @@ namespace ft
 		return rhs.operator->() - lhs.operator->();
 	}
 	/*End of VectorRevIter operators*/
+
+	template <typename N, typename T>
+	class MapIter{
+	public:
+		typedef T 								value_type;
+		typedef T*								pointer;
+		typedef T&								reference;
+		typedef N								node_type;
+		typedef N*								node_pointer;
+		typedef N&								node_reference;
+		typedef typename std::ptrdiff_t			difference_type;
+		typedef std::bidirectional_iterator_tag	iterator_category;
+
+		MapIter() : _Nptr(nullptr){}
+		MapIter(node_pointer Nptr) : _Nptr(Nptr) {}
+		MapIter(MapIter const &src) { *this = src; }
+		virtual ~MapIter(){}
+
+		reference operator*(){ return *_Nptr->value; }
+		reference operator*() const{ return *_Nptr->value; }
+
+		
+	private:
+		node_pointer	_Nptr;
+	};
 }
 
 #endif // ITERATOR_HPP

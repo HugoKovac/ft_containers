@@ -11,7 +11,9 @@
 # define __NS_S "std"
 #endif
 
+#include <vector>
 #include "vector.hpp"
+#include <map>
 #include "map.hpp"
 
 #define COLOR_RED "\x1B[31m"
