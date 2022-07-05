@@ -50,7 +50,6 @@ namespace ft{
 		typedef bool color_type;
 
 		Node	*_root;
-		// allocator_type _alloc;
 		size_type _size;
 		compare_type _comp;
 		
@@ -62,10 +61,58 @@ namespace ft{
 			return new Node(val, new_color);
 		}
 
-		void insert(value_type const &val){//?change return type
-			if (!_size)
-				_root = newNode(val, BLACK);
+		// void insert(value_type const &val){//?change return type
+		// 	if (!_size)
+		// 		_root = newNode(val, BLACK);
+		// 	else{
+
+		// 	}
+		// }
+
+	void insert(value_type const &val)
+	{
+		Node *inserted_node = new Node(val, RED);
+		if (!_root)
+			_root = inserted_node;
+		else
+		{
+			Node *n = _root;
+			while (1)
+			{
+				short comp_result = _comp(val.first, n->value->first);
+				if (comp_result == 0)
+				{
+					n->value->second = val.second;
+					delete inserted_node;
+					return;
+				}
+				else if (comp_result < 0)
+				{
+					if (n->left == NULL)
+					{
+						n->left = inserted_node;
+						break;
+					}
+					else
+						n = n->left;
+				}
+				else
+				{
+					assert (comp_result > 0);
+					if (n->right == NULL)
+					{
+						n->right = inserted_node;
+						break;
+					}
+					else
+						n = n->right;
+				}
+			}
+			// inserted_node->parent = n;
 		}
+		// insert_case1(t, inserted_node);
+		// verify_properties(t);
+	}
 
 		iterator begin(){
 			// if (!_root)
