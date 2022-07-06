@@ -52,7 +52,99 @@ namespace ft{
 		Node	*_root;
 		size_type _size;
 		compare_type _comp;
+
+		Node *_min(Node *n){
+			Node *tmp;
+			tmp = n;
+
+			while (tmp && tmp->left)
+				tmp = tmp->left;
 		
+			return tmp;
+		}
+
+		Node *_max(Node *n){
+			Node *tmp;
+			tmp = n;
+
+			while (tmp && tmp->right)
+				tmp = tmp->right;
+		
+			return tmp;
+		}
+		
+		Node *sibling(Node *n){
+			if (n && n->parent && n->parent->left && n->parent->right){
+				if (n->parent->left == n)
+					return n->parent->right;
+				else
+					return n->parent->left;
+			}
+			return NULL;
+		}
+
+		Node *uncle(Node *n)
+		{
+			if (n && n->parent)
+				return sibling(n->parent);
+			return NULL;
+		}
+
+		Node *grandpa(Node *n){
+			if (n && n->parent && n->parent->parent){
+				return n->parent->parent;
+			}
+			return NULL;
+		}
+
+		void insert_case4(Node *root, Node *n){
+			if (n == n->parent->right && n->parent == grandpa(n)->left){
+				// rotate_left(t, n->parent);
+				n = n->left;
+			}
+			else
+				insert_case5(root, n);
+		}
+
+		void insert_case3(Node *root, Node *n){
+			if (uncle(n) && uncle(n)->color == RED){
+				n->parent->color = BLACK;
+				uncle(n)->color = BLACK;
+				grandpa(n)->color = RED;
+				insert_case1(root, grandpa(n));
+			}
+			else
+				insert_case4(root, n);
+		}
+
+		void insert_case2(Node *root, Node *n){
+			if (n->parent->color == BLACK)
+				return;
+			insert_case3(root, n);
+		}
+
+		void insert_case1(Node *root, Node *n){
+			if (!n->parent)
+				n->color = BLACK;
+			else
+				insert_case2(root, n);
+		}
+
+
+		void insert_case5(Node *root, Node *n){
+			(void)root;
+			n->parent->color = BLACK;
+			grandpa(n)->color = RED;
+			if (n == n->parent->left && n->parent == grandpa(n)->left)
+			{
+				// rotate_right(t, grandparent(n));
+			}
+			else
+			{
+				// assert (n == n->parent->right && n->parent == grandparent(n)->right);
+				// rotate_left(t, grandparent(n));
+			}
+		}
 
 	public :
 		Tree() : _root(NULL), _size(0){}
@@ -61,70 +153,53 @@ namespace ft{
 			return new Node(val, new_color);
 		}
 
-		// void insert(value_type const &val){//?change return type
-		// 	if (!_size)
-		// 		_root = newNode(val, BLACK);
-		// 	else{
-
-		// 	}
-		// }
-
-	void insert(value_type const &val)
-	{
-		Node *inserted_node = new Node(val, RED);
-		if (!_root)
-			_root = inserted_node;
-		else
+		void insert(value_type const &val)//?change return type
 		{
-			Node *n = _root;
-			while (1)
+			Node *inserted_node = new Node(val, RED);
+			if (!_root)
+				_root = inserted_node;
+			else
 			{
-				short comp_result = _comp(val.first, n->value->first);
-				if (comp_result == 0)
+				Node *n = _root;
+				while (1)
 				{
-					n->value->second = val.second;
-					delete inserted_node;
-					return;
-				}
-				else if (comp_result < 0)
-				{
-					if (n->left == NULL)
+					if (_comp(val.first, n->value->first))
 					{
-						n->left = inserted_node;
-						break;
+						if (n->left == NULL)
+						{
+							n->left = inserted_node;
+							break;
+						}
+						else
+							n = n->left;
 					}
-					else
-						n = n->left;
-				}
-				else
-				{
-					assert (comp_result > 0);
-					if (n->right == NULL)
+					else if (!_comp(val.first, n->value->first))
 					{
-						n->right = inserted_node;
-						break;
+						if (n->right == NULL)
+						{
+							n->right = inserted_node;
+							break;
+						}
+						else
+							n = n->right;
 					}
-					else
-						n = n->right;
+					else{
+						n->value->second = val.second;
+						delete inserted_node;
+						return;
+					}
 				}
+				inserted_node->parent = n;
 			}
-			// inserted_node->parent = n;
+			insert_case1(_root, inserted_node);
+			// verify_properties(t);
 		}
-		// insert_case1(t, inserted_node);
-		// verify_properties(t);
-	}
 
-		iterator begin(){
-			// if (!_root)
-			// 	return iterator();
-			Node *tmp;
-			tmp = _root;
-			while (tmp && tmp->left){
-				tmp = tmp->left;
-			}
-		
-			return iterator(tmp);
-		}
+		iterator begin(){ return iterator(_min(_root)); }
+		const_iterator begin() const{ return const_iterator(_min(_root)); }
+
+		iterator end(){ return iterator(_max(_root)); }
+		const_iterator end() const{ return const_iterator(_max(_root)); }
 
 	};
 
@@ -175,6 +250,10 @@ namespace ft{
 		iterator begin(){ return _rbt.begin(); }
 
 		const_iterator begin() const{ return _rbt.begin(); }
+
+		iterator end(){ return _rbt.end(); }
+
+		const_iterator end() const{ return _rbt.end(); }
 
 		void insert (const value_type& val)//!change return type
 		{

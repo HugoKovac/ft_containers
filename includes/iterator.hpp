@@ -187,7 +187,7 @@ namespace ft
 		typedef std::bidirectional_iterator_tag	iterator_category;
 
 		MapIter() : _Nptr(nullptr){}
-		MapIter(node_pointer Nptr) : _Nptr(Nptr) {}
+		MapIter(node_pointer Nptr, bool end = false) : _Nptr(Nptr), _end(end){}
 		MapIter(MapIter const &src) { *this = src; }
 		virtual ~MapIter(){}
 
@@ -197,6 +197,8 @@ namespace ft
 		
 	private:
 		node_pointer	_Nptr;
+		node_pointer	_root;
+		bool			_end;
 	};
 }
 
