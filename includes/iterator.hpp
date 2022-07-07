@@ -190,10 +190,60 @@ namespace ft
 		MapIter(node_pointer Nptr, bool end = false) : _Nptr(Nptr), _end(end){}
 		MapIter(MapIter const &src) { *this = src; }
 		virtual ~MapIter(){}
+	private:
+		node_pointer _min(node_pointer n){
+			node_pointer tmp;
+			tmp = n;
+
+			while (tmp && tmp->left)
+				tmp = tmp->left;
+		
+			return tmp;
+		}
+
+		node_pointer _max(node_pointer n){
+			node_pointer tmp;
+			tmp = n;
+
+			while (tmp && tmp->right)
+				tmp = tmp->right;
+		
+			return tmp;
+		}
+
+		node_pointer _next(node_pointer n) {
+			if (n->right)
+				return (_min(n->right));
+			node_pointer parent = n->parent;
+			while (parent && n == parent->right) {
+				n = parent;
+				parent = parent->parent;
+			}
+			return (parent);
+		}
+
+		node_pointer _prev(node_pointer n) {
+			if (n->left)
+				return (_max(n->left));
+			node_pointer parent = n->parent;
+			while (parent && n == parent->left) {
+				n = parent;
+				parent = parent->parent;
+			}
+			return (parent);
+		}
+	public:
+
+		friend bool operator==(const MapIter &lhs, const MapIter &rhs) { return lhs._Nptr == rhs._Nptr; };
+        friend bool operator!=(const MapIter &lhs, const MapIter &rhs) { return lhs._Nptr != rhs._Nptr; };
 
 		reference operator*(){ return *_Nptr->value; }
 		reference operator*() const{ return *_Nptr->value; }
 
+		MapIter operator ++(){ _Nptr = _next(_Nptr); return *this; }
+		MapIter operator ++(int){ MapIter cpy(_Nptr, _end); _Nptr = _next(_Nptr); return cpy; }
+
+		pointer operator->() const{ return &(operator*()); }
 		
 	private:
 		node_pointer	_Nptr;

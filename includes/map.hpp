@@ -97,52 +97,102 @@ namespace ft{
 			return NULL;
 		}
 
-		void insert_case4(Node *root, Node *n){
+		void replace_node(Node *oldNode, Node *newNode)
+		{
+			if (oldNode->parent == NULL)
+				_root = newNode;
+			else
+			{
+				if (oldNode == oldNode->parent->left)
+					oldNode->parent->left = newNode;
+				else
+					oldNode->parent->right = newNode;
+			}
+			if (newNode != NULL)
+				newNode->parent = oldNode->parent;
+		}
+
+		void rotate_left(Node *x){
+			Node *y = x->right;
+			x->right = y->left;
+			if (y->left) {
+				y->left->parent = x;
+			}
+			y->parent = x->parent;
+			if (!x->parent) {
+				_root = y;
+			} else if (x == x->parent->left) {
+				x->parent->left = y;
+			} else {
+				x->parent->right = y;
+			}
+			y->left = x;
+			x->parent = y;
+		}
+
+		void rotate_right(Node *x)
+		{
+			Node *y = x->left;
+			x->left = y->right;
+			if (y && y->right) {
+				y->right->parent = x;
+			}
+			y->parent = x->parent;
+			if (!x->parent) {
+				_root = y;
+			} else if (x == x->parent->right) {
+				x->parent->right = y;
+			} else {
+				x->parent->left = y;
+			}
+			y->right = x;
+			x->parent = y;
+		}
+
+
+		void insert_case4(Node *n){
 			if (n == n->parent->right && n->parent == grandpa(n)->left){
-				// rotate_left(t, n->parent);
+				rotate_left(n->parent);
 				n = n->left;
 			}
 			else
-				insert_case5(root, n);
+				insert_case5(n);
 		}
 
-		void insert_case3(Node *root, Node *n){
+		void insert_case3(Node *n){
 			if (uncle(n) && uncle(n)->color == RED){
 				n->parent->color = BLACK;
 				uncle(n)->color = BLACK;
 				grandpa(n)->color = RED;
-				insert_case1(root, grandpa(n));
+				insert_case1(grandpa(n));
 			}
 			else
-				insert_case4(root, n);
+				insert_case4(n);
 		}
 
-		void insert_case2(Node *root, Node *n){
+		void insert_case2(Node *n){
 			if (n->parent->color == BLACK)
 				return;
-			insert_case3(root, n);
+			insert_case3(n);
 		}
 
-		void insert_case1(Node *root, Node *n){
+		void insert_case1( Node *n){
 			if (!n->parent)
 				n->color = BLACK;
 			else
-				insert_case2(root, n);
+				insert_case2(n);
 		}
 
 
-		void insert_case5(Node *root, Node *n){
-			(void)root;
+		void insert_case5(Node *n){
 			n->parent->color = BLACK;
 			grandpa(n)->color = RED;
 			if (n == n->parent->left && n->parent == grandpa(n)->left)
-			{
-				// rotate_right(t, grandparent(n));
-			}
+				rotate_right(grandpa(n));
 			else
 			{
-				// assert (n == n->parent->right && n->parent == grandparent(n)->right);
-				// rotate_left(t, grandparent(n));
+				if (n == n->parent->right && n->parent == grandpa(n)->right)
+					rotate_left(grandpa(n));
 			}
 		}
 
@@ -191,7 +241,7 @@ namespace ft{
 				}
 				inserted_node->parent = n;
 			}
-			insert_case1(_root, inserted_node);
+			insert_case1(inserted_node);
 			// verify_properties(t);
 		}
 
