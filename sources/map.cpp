@@ -5,6 +5,9 @@ void map_test(void){
 
 	test.insert(__NS::make_pair(10, 10));
 	test.insert(__NS::make_pair(2, 2));
+	test.insert(__NS::make_pair(2, 2));
+	test.insert(__NS::make_pair(2, 2));
+	test.insert(__NS::make_pair(2, 2));
 	test.insert(__NS::make_pair(1, 10));
 	test.insert(__NS::make_pair(3, 2));
 	test.insert(__NS::make_pair(5, 10));
@@ -19,5 +22,4 @@ void map_test(void){
 		std::cout << it->first << std::endl; 
 		it++;
 	}
-	// std::cout << "end => " << (*test.end()).first << std::endl;
 }

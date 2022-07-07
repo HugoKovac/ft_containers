@@ -242,14 +242,14 @@ namespace ft{
 				inserted_node->parent = n;
 			}
 			insert_case1(inserted_node);
-			// verify_properties(t);
+			// verify_properties(t);//!check usage
 		}
 
 		iterator begin(){ return iterator(_min(_root)); }
 		const_iterator begin() const{ return const_iterator(_min(_root)); }
 
-		iterator end(){ return iterator(_max(_root)); }
-		const_iterator end() const{ return const_iterator(_max(_root)); }
+		iterator end(){ return iterator(NULL); }
+		const_iterator end() const{ return const_iterator(NULL); }
 
 	};
 
