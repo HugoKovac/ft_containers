@@ -3,11 +3,13 @@
 void map_test(void){
 	__NS::map<int, int> test;
 
+	std::cout << test.size() << " | " << test.empty() << std::endl;
+
 	test.insert(__NS::make_pair(10, 10));
 	test.insert(__NS::make_pair(2, 2));
-	test.insert(__NS::make_pair(2, 2));
-	test.insert(__NS::make_pair(2, 2));
-	test.insert(__NS::make_pair(2, 2));
+	test.insert(__NS::make_pair(2, 3));
+	test.insert(__NS::make_pair(2, 6543));
+	test.insert(__NS::make_pair(2, 43242));
 	test.insert(__NS::make_pair(1, 10));
 	test.insert(__NS::make_pair(3, 2));
 	test.insert(__NS::make_pair(5, 10));
@@ -17,9 +19,11 @@ void map_test(void){
 	test.insert(__NS::make_pair(0, 10));
 	test.insert(__NS::make_pair(-12, 2));
 
+	std::cout << test.size() << " | " << test.empty() << std::endl;
+
 	__NS::map<int, int>::iterator it = test.begin();
 	while (it != test.end()){
-		std::cout << it->first << std::endl; 
+		std::cout << it->second << std::endl; 
 		it++;
 	}
 }

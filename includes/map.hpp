@@ -206,8 +206,10 @@ namespace ft{
 		void insert(value_type const &val)//?change return type
 		{
 			Node *inserted_node = new Node(val, RED);
-			if (!_root)
+			if (!_root){
 				_root = inserted_node;
+				++_size;
+			}
 			else
 			{
 				Node *n = _root;
@@ -223,7 +225,7 @@ namespace ft{
 						else
 							n = n->left;
 					}
-					else if (!_comp(val.first, n->value->first))
+					else if (_comp(n->value->first, val.first))
 					{
 						if (n->right == NULL)
 						{
@@ -233,17 +235,21 @@ namespace ft{
 						else
 							n = n->right;
 					}
-					else{
-						n->value->second = val.second;
+					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
 						delete inserted_node;
 						return;
 					}
 				}
+				++_size;
 				inserted_node->parent = n;
 			}
 			insert_case1(inserted_node);
 			// verify_properties(t);//!check usage
 		}
+
+		size_type size() const{ return _size; }
+
+		bool empty() const{ return _size == 0; }
 
 		iterator begin(){ return iterator(_min(_root)); }
 		const_iterator begin() const{ return const_iterator(_min(_root)); }
@@ -309,6 +315,10 @@ namespace ft{
 		{
 			_rbt.insert(val);
 		}
+
+		size_type size() const{ return _rbt.size(); }
+
+		bool empty() const{ return _rbt.empty(); }
 	};
 
 }
