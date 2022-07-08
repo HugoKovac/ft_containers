@@ -43,14 +43,17 @@ namespace ft{
 			}
 		};
 
+
 		typedef MapIter<Node, value_type>							iterator;
 		typedef MapIter<Node, const value_type>					const_iterator;
 
 	private :
+		typedef typename Alloc::template rebind< Node >::other	allocator_type_node;
 		typedef bool color_type;
 
 		Node	*_root;
 		size_type _size;
+		allocator_type_node _alloc;
 		compare_type _comp;
 
 		Node *_min(Node *n){
@@ -73,7 +76,7 @@ namespace ft{
 			return tmp;
 		}
 		
-		Node *sibling(Node *n){
+		Node *_sibling(Node *n){
 			if (n && n->parent && n->parent->left && n->parent->right){
 				if (n->parent->left == n)
 					return n->parent->right;
@@ -83,21 +86,21 @@ namespace ft{
 			return NULL;
 		}
 
-		Node *uncle(Node *n)
+		Node *_uncle(Node *n)
 		{
 			if (n && n->parent)
-				return sibling(n->parent);
+				return _sibling(n->parent);
 			return NULL;
 		}
 
-		Node *grandpa(Node *n){
+		Node *_grandpa(Node *n){
 			if (n && n->parent && n->parent->parent){
 				return n->parent->parent;
 			}
 			return NULL;
 		}
 
-		void replace_node(Node *oldNode, Node *newNode)
+		void _replace_node(Node *oldNode, Node *newNode)
 		{
 			if (oldNode->parent == NULL)
 				_root = newNode;
@@ -112,7 +115,7 @@ namespace ft{
 				newNode->parent = oldNode->parent;
 		}
 
-		void rotate_left(Node *x){
+		void _rotate_left(Node *x){
 			Node *y = x->right;
 			x->right = y->left;
 			if (y->left) {
@@ -130,7 +133,7 @@ namespace ft{
 			x->parent = y;
 		}
 
-		void rotate_right(Node *x)
+		void _rotate_right(Node *x)
 		{
 			Node *y = x->left;
 			x->left = y->right;
@@ -150,51 +153,83 @@ namespace ft{
 		}
 
 
-		void insert_case4(Node *n){
-			if (n == n->parent->right && n->parent == grandpa(n)->left){
-				rotate_left(n->parent);
+		void _insert_case4(Node *n){
+			if (n == n->parent->right && n->parent == _grandpa(n)->left){
+				_rotate_left(n->parent);
 				n = n->left;
 			}
 			else
-				insert_case5(n);
+				_insert_case5(n);
 		}
 
-		void insert_case3(Node *n){
-			if (uncle(n) && uncle(n)->color == RED){
+		void _insert_case3(Node *n){
+			if (_uncle(n) && _uncle(n)->color == RED){
 				n->parent->color = BLACK;
-				uncle(n)->color = BLACK;
-				grandpa(n)->color = RED;
-				insert_case1(grandpa(n));
+				_uncle(n)->color = BLACK;
+				_grandpa(n)->color = RED;
+				_insert_case1(_grandpa(n));
 			}
 			else
-				insert_case4(n);
+				_insert_case4(n);
 		}
 
-		void insert_case2(Node *n){
+		void _insert_case2(Node *n){
 			if (n->parent->color == BLACK)
 				return;
-			insert_case3(n);
+			_insert_case3(n);
 		}
 
-		void insert_case1( Node *n){
+		void _insert_case1( Node *n){
 			if (!n->parent)
 				n->color = BLACK;
 			else
-				insert_case2(n);
+				_insert_case2(n);
 		}
 
 
-		void insert_case5(Node *n){
+		void _insert_case5(Node *n){
 			n->parent->color = BLACK;
-			grandpa(n)->color = RED;
-			if (n == n->parent->left && n->parent == grandpa(n)->left)
-				rotate_right(grandpa(n));
+			_grandpa(n)->color = RED;
+			if (n == n->parent->left && n->parent == _grandpa(n)->left)
+				_rotate_right(_grandpa(n));
 			else
 			{
-				if (n == n->parent->right && n->parent == grandpa(n)->right)
-					rotate_left(grandpa(n));
+				if (n == n->parent->right && n->parent == _grandpa(n)->right)
+					_rotate_left(_grandpa(n));
 			}
 		}
+
+		// Node *_search(value_type const &val){
+		// if (!_root)
+		// 	NULL;
+		// else
+		// {
+		// 	Node *n = _root;
+		// 	while (1)
+		// 	{
+		// 		if (_comp(val.first, n->value->first))
+		// 		{
+		// 			if (n->left == NULL)
+		// 				return n->left;
+		// 			else
+		// 				n = n->left;
+		// 		}
+		// 		else if (_comp(n->value->first, val.first))
+		// 		{
+		// 			if (n->right == NULL)
+		// 			{
+		// 				n->right = inserted_node;
+		// 				break;
+		// 			}
+		// 			else
+		// 				n = n->right;
+		// 		}
+		// 		else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
+		// 			delete inserted_node;
+		// 			return make_pair(iterator(n), true);
+		// 		}
+		// 	}
+		// }
 
 	public :
 		Tree() : _root(NULL), _size(0){}
@@ -203,7 +238,7 @@ namespace ft{
 			return new Node(val, new_color);
 		}
 
-		void insert(value_type const &val)//?change return type
+		pair<iterator,bool> insert(value_type const &val)//?change return type
 		{
 			Node *inserted_node = new Node(val, RED);
 			if (!_root){
@@ -237,15 +272,19 @@ namespace ft{
 					}
 					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
 						delete inserted_node;
-						return;
+						return make_pair(iterator(n), true);
 					}
 				}
 				++_size;
 				inserted_node->parent = n;
 			}
-			insert_case1(inserted_node);
-			// verify_properties(t);//!check usage
+			_insert_case1(inserted_node);
+			return make_pair(iterator(inserted_node), true);
 		}
+
+		// iterator insert (iterator position, const value_type& val){
+		// 	
+		// }
 
 		size_type size() const{ return _size; }
 
@@ -256,6 +295,8 @@ namespace ft{
 
 		iterator end(){ return iterator(NULL); }
 		const_iterator end() const{ return const_iterator(NULL); }
+
+		size_type max_size() const{ return _alloc.max_size(); }
 
 	};
 
@@ -311,14 +352,13 @@ namespace ft{
 
 		const_iterator end() const{ return _rbt.end(); }
 
-		void insert (const value_type& val)//!change return type
-		{
-			_rbt.insert(val);
-		}
+		pair<iterator,bool> insert (const value_type& val){ return _rbt.insert(val); }
 
 		size_type size() const{ return _rbt.size(); }
 
 		bool empty() const{ return _rbt.empty(); }
+
+		size_type max_size() const{ return _rbt.max_size(); }
 	};
 
 }

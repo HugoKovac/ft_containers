@@ -5,19 +5,13 @@ void map_test(void){
 
 	std::cout << test.size() << " | " << test.empty() << std::endl;
 
-	test.insert(__NS::make_pair(10, 10));
-	test.insert(__NS::make_pair(2, 2));
-	test.insert(__NS::make_pair(2, 3));
-	test.insert(__NS::make_pair(2, 6543));
-	test.insert(__NS::make_pair(2, 43242));
-	test.insert(__NS::make_pair(1, 10));
-	test.insert(__NS::make_pair(3, 2));
-	test.insert(__NS::make_pair(5, 10));
-	test.insert(__NS::make_pair(6, 2));
-	test.insert(__NS::make_pair(9, 10));
-	test.insert(__NS::make_pair(7, 2));
-	test.insert(__NS::make_pair(0, 10));
-	test.insert(__NS::make_pair(-12, 2));
+	for (int i = 0; i < 1000000; i++)
+		std::cout << test.insert(__NS::make_pair(i, i - 10000)).first->first << std::endl;
+
+	std::cout << test.insert(__NS::make_pair(2, 20)).first->second << std::endl;
+	std::cout << test.insert(__NS::make_pair(2, 10000)).first->second << std::endl;
+	
+	// std::cout << test.insert(test.begin(), __NS::make_pair(10, 1))->second << std::endl;
 
 	std::cout << test.size() << " | " << test.empty() << std::endl;
 
