@@ -15,15 +15,15 @@ namespace ft{
 	template < class T, class Compare, class Alloc > 
 	class Tree{
 	public :
-		typedef T											value_type;
-		typedef Compare										key_compare;
-		typedef Alloc										allocator_type;
-		typedef Compare										compare_type;
-		typedef typename allocator_type::reference 			reference;
-		typedef typename allocator_type::const_reference	const_reference;
-		typedef typename allocator_type::pointer			pointer;
-		typedef typename allocator_type::const_pointer		const_pointer;
-		typedef typename allocator_type::size_type			size_type;
+		typedef T												value_type;
+		typedef Compare											key_compare;
+		typedef Alloc											allocator_type;
+		typedef Compare											compare_type;
+		typedef typename allocator_type::reference 				reference;
+		typedef typename allocator_type::const_reference		const_reference;
+		typedef typename allocator_type::pointer				pointer;
+		typedef typename allocator_type::const_pointer			const_pointer;
+		typedef typename allocator_type::size_type				size_type;
 
 		struct Node{
 			typedef bool color_type;
@@ -44,8 +44,10 @@ namespace ft{
 		};
 
 
-		typedef MapIter<Node, value_type>							iterator;
+		typedef MapIter<Node, value_type>						iterator;
 		typedef MapIter<Node, const value_type>					const_iterator;
+		typedef RevIter<iterator>								reverse_iterator;
+		typedef RevIter<const iterator>							const_reverse_iterator;
 
 	private :
 		typedef typename Alloc::template rebind< Node >::other	allocator_type_node;
@@ -272,14 +274,14 @@ namespace ft{
 					}
 					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
 						delete inserted_node;
-						return make_pair(iterator(n), true);
+						return make_pair(iterator(n, _root), true);
 					}
 				}
 				++_size;
 				inserted_node->parent = n;
 			}
 			_insert_case1(inserted_node);
-			return make_pair(iterator(inserted_node), true);
+			return make_pair(iterator(inserted_node, _root), true);
 		}
 
 		// iterator insert (iterator position, const value_type& val){
@@ -290,11 +292,17 @@ namespace ft{
 
 		bool empty() const{ return _size == 0; }
 
-		iterator begin(){ return iterator(_min(_root)); }
-		const_iterator begin() const{ return const_iterator(_min(_root)); }
+		iterator begin(){ return iterator(_min(_root), _root); }
+		const_iterator begin() const{ return const_iterator(_min(_root), _root); }
 
-		iterator end(){ return iterator(NULL); }
-		const_iterator end() const{ return const_iterator(NULL); }
+		reverse_iterator rbegin(){ return reverse_iterator(end()); }
+		const_reverse_iterator rbegin() const{ return const_reverse_iterator(end()); }
+
+		iterator end(){ return iterator(NULL, _root); }
+		const_iterator end() const{ return const_iterator(NULL, _root); }
+
+		reverse_iterator rend(){ return reverse_iterator(begin()); }
+		const_reverse_iterator rend() const{ return const_reverse_iterator(begin()); }
 
 		size_type max_size() const{ return _alloc.max_size(); }
 
@@ -340,17 +348,23 @@ namespace ft{
 		typedef typename allocator_type::const_pointer				const_pointer;
 		typedef typename Tree::iterator								iterator;
 		typedef typename Tree::const_iterator						const_iterator;
+		typedef typename Tree::reverse_iterator						reverse_iterator;
+		typedef typename Tree::const_reverse_iterator				const_reverse_iterator;
 		typedef typename iterator_traits<iterator>::difference_type	difference_type;
 		typedef size_t												size_type;
 		///END TYPEDEFS CONTINUATION///
 
 		iterator begin(){ return _rbt.begin(); }
-
 		const_iterator begin() const{ return _rbt.begin(); }
 
-		iterator end(){ return _rbt.end(); }
+		reverse_iterator rbegin(){ return _rbt.rbegin(); }
+		const_reverse_iterator rbegin() const{ return _rbt.rbegin(); }
 
+		iterator end(){ return _rbt.end(); }
 		const_iterator end() const{ return _rbt.end(); }
+
+		reverse_iterator rend(){ return _rbt.rend(); }
+		const_reverse_iterator rend() const{ return _rbt.rend(); }
 
 		pair<iterator,bool> insert (const value_type& val){ return _rbt.insert(val); }
 

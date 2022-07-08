@@ -20,7 +20,8 @@ class vector{
 		typedef typename allocator_type::size_type			size_type;
 		typedef ft::VectorIter<value_type>					iterator;
 		typedef ft::VectorIter<const value_type>			const_iterator;
-		typedef VectorRevIter<iterator>					reverse_iterator;
+		typedef RevIter<iterator>							reverse_iterator;
+		typedef RevIter<const iterator>						const_reverse_iterator;
 		typedef typename allocator_type::reference			reference;
 		typedef typename allocator_type::const_reference	const_reference;
 
@@ -92,8 +93,10 @@ class vector{
 
 
 	reverse_iterator rbegin(){ return reverse_iterator(end()); };
+	const_reverse_iterator rbegin()const{ return const_reverse_iterator(end()); };
 
 	reverse_iterator rend(){ return reverse_iterator(begin()); };
+	const_reverse_iterator rend()const{ return const_reverse_iterator(begin()); };
 
 	void reserve (size_type n){ 
 		if (n > max_size())
