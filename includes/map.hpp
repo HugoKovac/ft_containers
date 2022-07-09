@@ -201,38 +201,6 @@ namespace ft{
 			}
 		}
 
-		// Node *_search(value_type const &val){
-		// if (!_root)
-		// 	NULL;
-		// else
-		// {
-		// 	Node *n = _root;
-		// 	while (1)
-		// 	{
-		// 		if (_comp(val.first, n->value->first))
-		// 		{
-		// 			if (n->left == NULL)
-		// 				return n->left;
-		// 			else
-		// 				n = n->left;
-		// 		}
-		// 		else if (_comp(n->value->first, val.first))
-		// 		{
-		// 			if (n->right == NULL)
-		// 			{
-		// 				n->right = inserted_node;
-		// 				break;
-		// 			}
-		// 			else
-		// 				n = n->right;
-		// 		}
-		// 		else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
-		// 			delete inserted_node;
-		// 			return make_pair(iterator(n), true);
-		// 		}
-		// 	}
-		// }
-
 	public :
 		Tree() : _root(NULL), _size(0){}
 
@@ -306,6 +274,45 @@ namespace ft{
 
 		size_type max_size() const{ return _alloc.max_size(); }
 
+		iterator find (const value_type& val){
+			if (!_root)
+				return end();
+			else
+			{
+				Node *n = _root;
+				while (1)
+				{
+					if (_comp(val.first, n->value->first))
+					{
+						// std::cout << "inf "<< n->value->first << std::endl;
+						if (n->left == NULL)
+							return end();
+						else
+							n = n->left;
+					}
+					else if (_comp(n->value->first, val.first))
+					{
+						// std::cout << "sup "<< n->value->first << std::endl;
+						if (n->right == NULL)
+							return end();
+						else
+							n = n->right;
+					}
+					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
+						// std::cout << "equal "<< n->value->first << std::endl;
+						if (!n)
+							return end();
+						return iterator(n, _root);
+					}
+				}
+			}
+		}
+
+		// const_iterator find (const value_type& val) const{
+
+		// }
+
+
 	};
 
 	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<pair<const Key,T> > >
@@ -373,6 +380,15 @@ namespace ft{
 		bool empty() const{ return _rbt.empty(); }
 
 		size_type max_size() const{ return _rbt.max_size(); }
+
+		mapped_type& operator[] (const key_type& k){ return (*((insert(make_pair(k,mapped_type()))).first)).second; }
+
+		value_compare value_comp() const{ return value_compare(); }
+		key_compare key_comp() const{ return key_compare(); }
+		allocator_type get_allocator() const{ return allocator_type(); }
+
+		iterator find (const key_type& k){ return _rbt.find(make_pair(k, 0)); }
+
 	};
 
 }
