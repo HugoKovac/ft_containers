@@ -37,4 +37,7 @@ void map_test(void){
 		std::cout << rit->second << std::endl; 
 		rit++;
 	}
+
+	std::cout << test.count(10) << std::endl;
+	std::cout << test.count(-10) << std::endl;
 }

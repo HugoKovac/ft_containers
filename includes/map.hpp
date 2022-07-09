@@ -414,6 +414,8 @@ namespace ft{
 		iterator find (const key_type& k){ return _rbt.find(make_pair(k, 0)); }
 		const_iterator find (const key_type& k) const{ return _rbt.find(make_pair(k, 0)); }
 
+		size_type count (const key_type& k) const{ return find(k) != end(); }
+
 	};
 
 }
