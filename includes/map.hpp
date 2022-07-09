@@ -416,6 +416,15 @@ namespace ft{
 
 		size_type count (const key_type& k) const{ return find(k) != end(); }
 
+		template <class InputIterator>
+		void insert (InputIterator first, InputIterator last){
+			while (first != last)
+			{
+				insert(*first);
+				first++;
+			}
+		}
+
 	};
 
 }

@@ -40,4 +40,16 @@ void map_test(void){
 
 	std::cout << test.count(10) << std::endl;
 	std::cout << test.count(-10) << std::endl;
+
+	{
+		__NS::map<int, int> tmp;
+
+		tmp.insert(test.begin(), test.end());
+
+		__NS::map<int, int>::iterator tmp_it = tmp.begin();
+		while (tmp_it != tmp.end()){
+			std::cout << tmp_it->second << std::endl; 
+			tmp_it++;
+		}
+	}
 }
