@@ -284,7 +284,6 @@ namespace ft{
 				{
 					if (_comp(val.first, n->value->first))
 					{
-						// std::cout << "inf "<< n->value->first << std::endl;
 						if (n->left == NULL)
 							return end();
 						else
@@ -292,14 +291,12 @@ namespace ft{
 					}
 					else if (_comp(n->value->first, val.first))
 					{
-						// std::cout << "sup "<< n->value->first << std::endl;
 						if (n->right == NULL)
 							return end();
 						else
 							n = n->right;
 					}
 					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
-						// std::cout << "equal "<< n->value->first << std::endl;
 						if (!n)
 							return end();
 						return iterator(n, _root);
@@ -308,9 +305,36 @@ namespace ft{
 			}
 		}
 
-		// const_iterator find (const value_type& val) const{
-
-		// }
+		const_iterator find (const value_type& val) const{
+			if (!_root)
+				return end();
+			else
+			{
+				Node *n = _root;
+				while (1)
+				{
+					if (_comp(val.first, n->value->first))
+					{
+						if (n->left == NULL)
+							return end();
+						else
+							n = n->left;
+					}
+					else if (_comp(n->value->first, val.first))
+					{
+						if (n->right == NULL)
+							return end();
+						else
+							n = n->right;
+					}
+					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
+						if (!n)
+							return end();
+						return const_iterator(n, _root);
+					}
+				}
+			}
+		}
 
 
 	};
@@ -388,6 +412,7 @@ namespace ft{
 		allocator_type get_allocator() const{ return allocator_type(); }
 
 		iterator find (const key_type& k){ return _rbt.find(make_pair(k, 0)); }
+		const_iterator find (const key_type& k) const{ return _rbt.find(make_pair(k, 0)); }
 
 	};
 
