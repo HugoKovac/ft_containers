@@ -1,9 +1,6 @@
 #if !defined(IS_INTEGRAL_HPP)
 #define IS_INTEGRAL_HPP
 
-#define char16_t uint16_t
-#define char32_t uint32_t
-
 /*is_itegral*/
 namespace ft
 {
@@ -25,12 +22,6 @@ struct is_integral_spec<char> : public integral_sub<true, char>{};
 
 template <>//spec for int
 struct is_integral_spec<int> : public integral_sub<true, int>{};
-
-template <>//spec for char16_t
-struct is_integral_spec<char16_t> : public integral_sub<true, char16_t>{};
-
-template <>//spec for char32_t
-struct is_integral_spec<char32_t> : public integral_sub<true, char32_t>{};
 
 template <>//spec for wchar_t
 struct is_integral_spec<wchar_t> : public integral_sub<true, wchar_t>{};
