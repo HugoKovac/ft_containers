@@ -72,4 +72,59 @@ void map_test(void){
 			tmp_it++;
 		}
 	}
+
+	{
+		__NS::map<int, int> tmp;
+
+		tmp = test;
+
+		__NS::map<int, int>::iterator tmp_it = tmp.begin();
+		while (tmp_it != tmp.end()){
+			std::cout << tmp_it->second << std::endl; 
+			tmp_it++;
+		}
+	}
+
+	{
+		__NS::map<int, int> tmp;
+
+		tmp = test;
+
+		__NS::map<int, int>::iterator tmp_it = tmp.begin();
+		while (tmp_it != tmp.end()){
+			std::cout << tmp_it->second << std::endl; 
+			tmp_it++;
+		}
+
+		tmp.clear();
+		
+		tmp_it = tmp.begin();
+		while (tmp_it != tmp.end()){
+			std::cout << tmp_it->second << std::endl; 
+			tmp_it++;
+		}
+	}
+
+	// {
+	// 	__NS::map<int, int> tmp;
+
+	// 	for (int i = 100; i < 300; i++)
+	// 		tmp.insert(__NS::make_pair(i, i));
+
+	// 	tmp.swap(test);
+
+	// 	__NS::map<int, int>::iterator tmp_it = tmp.begin();
+	// 	while (tmp_it != tmp.end()){
+	// 		std::cout << tmp_it->second << std::endl; 
+	// 		tmp_it++;
+	// 	}
+
+	// 	tmp.swap(test);
+
+	// 	tmp_it = tmp.begin();
+	// 	while (tmp_it != tmp.end()){
+	// 		std::cout << tmp_it->second << std::endl; 
+	// 		tmp_it++;
+	// 	}
+	// }
 }

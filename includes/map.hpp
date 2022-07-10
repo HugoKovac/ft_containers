@@ -43,6 +43,8 @@ namespace ft{
 				value = this->alloc.allocate(1);
 				this->alloc.construct(value, val);
 			}
+
+			~Node(){ alloc.deallocate(value, 1); }
 		};
 
 
@@ -213,8 +215,23 @@ namespace ft{
 
 		Tree(Tree const &src) : _root(src._root), _comp(src._comp), _alloc_node(src._alloc_node){}
 
+		// ~Tree(){ clear1(); }
+
 		Node *newNode(value_type const &val, color_type new_color){
 			return new Node(val, new_color, _alloc_node);
+		}
+
+		void clear1(){ clear(_root); }
+
+		void clear(Node *n){
+			if (n == NULL)
+					return ;
+			if (n->right != NULL)
+				clear(n->right);
+			if (n->left != NULL)
+				clear(n->left);
+			this->_alloc.destroy(n);
+			this->_alloc.deallocate(n, 1);
 		}
 
 		pair<iterator,bool> insert(value_type const &val)//?change return type
@@ -405,6 +422,8 @@ namespace ft{
 		map (const map& x) : _rbt(x._rbt){ this->insert(x.begin(), x.end()); }
 		///END CONSTRUCTORS///
 
+		map& operator= (const map& x){ insert(x.begin(), x.end()); return *this; }
+
 		iterator begin(){ return _rbt.begin(); }
 		const_iterator begin() const{ return _rbt.begin(); }
 
@@ -446,6 +465,14 @@ namespace ft{
 		const_iterator find (const key_type& k) const{ return _rbt.find(make_pair(k, 0)); }
 
 		size_type count (const key_type& k) const{ return find(k) != end(); }
+
+		void swap (map& x){
+			map tmp(x);
+			x = *this;
+			*this = tmp;
+		}
+
+		void clear() { _rbt.clear1(); }
 
 	};
 
