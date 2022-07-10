@@ -52,4 +52,24 @@ void map_test(void){
 			tmp_it++;
 		}
 	}
+
+	{
+		__NS::map<int, int> tmp(test.begin(), test.end());
+
+		__NS::map<int, int>::iterator tmp_it = tmp.begin();
+		while (tmp_it != tmp.end()){
+			std::cout << tmp_it->second << std::endl; 
+			tmp_it++;
+		}
+	}
+
+	{
+		__NS::map<int, int> tmp(test);
+
+		__NS::map<int, int>::iterator tmp_it = tmp.begin();
+		while (tmp_it != tmp.end()){
+			std::cout << tmp_it->second << std::endl; 
+			tmp_it++;
+		}
+	}
 }

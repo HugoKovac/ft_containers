@@ -35,11 +35,13 @@ namespace ft{
 			value_type *value;
 			allocator_type alloc;
 
-			Node() : color(RED), parent(NULL), left(NULL), right(NULL), value(NULL){}
+			Node(const allocator_type& alloc)
+			: color(RED), parent(NULL), left(NULL), right(NULL), value(NULL), alloc(alloc){}
 
-			Node(value_type const &val, color_type new_color) : color(new_color), parent(NULL), left(NULL), right(NULL), value(NULL){
-				value = alloc.allocate(1);
-				alloc.construct(value, val);
+			Node(value_type const &val, color_type new_color, const allocator_type& alloc)
+			: color(new_color), parent(NULL), left(NULL), right(NULL), value(NULL), alloc(alloc){
+				value = this->alloc.allocate(1);
+				this->alloc.construct(value, val);
 			}
 		};
 
@@ -55,10 +57,11 @@ namespace ft{
 
 		Node	*_root;
 		size_type _size;
-		allocator_type_node _alloc;
 		compare_type _comp;
+		allocator_type _alloc_node;
+		allocator_type_node _alloc;
 
-		Node *_min(Node *n){
+		Node *_min(Node *n) const{
 			Node *tmp;
 			tmp = n;
 
@@ -68,7 +71,7 @@ namespace ft{
 			return tmp;
 		}
 
-		Node *_max(Node *n){
+		Node *_max(Node *n) const{
 			Node *tmp;
 			tmp = n;
 
@@ -78,7 +81,7 @@ namespace ft{
 			return tmp;
 		}
 		
-		Node *_sibling(Node *n){
+		Node *_sibling(Node *n) const{
 			if (n && n->parent && n->parent->left && n->parent->right){
 				if (n->parent->left == n)
 					return n->parent->right;
@@ -88,14 +91,13 @@ namespace ft{
 			return NULL;
 		}
 
-		Node *_uncle(Node *n)
-		{
+		Node *_uncle(Node *n) const{
 			if (n && n->parent)
 				return _sibling(n->parent);
 			return NULL;
 		}
 
-		Node *_grandpa(Node *n){
+		Node *_grandpa(Node *n) const{
 			if (n && n->parent && n->parent->parent){
 				return n->parent->parent;
 			}
@@ -202,15 +204,22 @@ namespace ft{
 		}
 
 	public :
-		Tree() : _root(NULL), _size(0){}
+		// Tree() : _root(NULL), _size(0){}
+		Tree(const key_compare& comp, const allocator_type& alloc) :
+		_root(NULL),
+		_size(0),
+		_comp(comp),
+		_alloc_node(alloc){}
+
+		Tree(Tree const &src) : _root(src._root), _comp(src._comp), _alloc_node(src._alloc_node){}
 
 		Node *newNode(value_type const &val, color_type new_color){
-			return new Node(val, new_color);
+			return new Node(val, new_color, _alloc_node);
 		}
 
 		pair<iterator,bool> insert(value_type const &val)//?change return type
 		{
-			Node *inserted_node = new Node(val, RED);
+			Node *inserted_node = new Node(val, RED, _alloc_node);
 			if (!_root){
 				_root = inserted_node;
 				++_size;
@@ -251,10 +260,6 @@ namespace ft{
 			_insert_case1(inserted_node);
 			return make_pair(iterator(inserted_node, _root), true);
 		}
-
-		// iterator insert (iterator position, const value_type& val){
-		// 	
-		// }
 
 		size_type size() const{ return _size; }
 
@@ -352,6 +357,7 @@ namespace ft{
 
 	private:
 		Tree _rbt;
+		key_compare _tree_comp;
 		///MEMBER CLASS VALUE_CMP///
 		class value_compare : public std::binary_function<value_type,value_type,bool>
 		{
@@ -384,6 +390,20 @@ namespace ft{
 		typedef typename iterator_traits<iterator>::difference_type	difference_type;
 		typedef size_t												size_type;
 		///END TYPEDEFS CONTINUATION///
+	private:
+		allocator_type _node_alloc;
+	public:
+		///CONSTRUCTORS///
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _rbt(comp, alloc){}
+		
+		template <class InputIterator>
+		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+		: _rbt(comp, alloc){
+			insert(first, last);
+		}
+
+		map (const map& x) : _rbt(x._rbt){ this->insert(x.begin(), x.end()); }
+		///END CONSTRUCTORS///
 
 		iterator begin(){ return _rbt.begin(); }
 		const_iterator begin() const{ return _rbt.begin(); }
@@ -398,6 +418,17 @@ namespace ft{
 		const_reverse_iterator rend() const{ return _rbt.rend(); }
 
 		pair<iterator,bool> insert (const value_type& val){ return _rbt.insert(val); }
+
+		iterator insert (iterator position, const value_type& val){ static_cast<void>(position); insert(val); }
+
+		template <class InputIterator>
+		void insert (InputIterator first, InputIterator last){
+			while (first != last)
+			{
+				insert(*first);
+				first++;
+			}
+		}
 
 		size_type size() const{ return _rbt.size(); }
 
@@ -415,15 +446,6 @@ namespace ft{
 		const_iterator find (const key_type& k) const{ return _rbt.find(make_pair(k, 0)); }
 
 		size_type count (const key_type& k) const{ return find(k) != end(); }
-
-		template <class InputIterator>
-		void insert (InputIterator first, InputIterator last){
-			while (first != last)
-			{
-				insert(*first);
-				first++;
-			}
-		}
 
 	};
 
