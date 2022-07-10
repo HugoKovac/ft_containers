@@ -1,5 +1,9 @@
 #if !defined(IS_INTEGRAL_HPP)
 #define IS_INTEGRAL_HPP
+
+#define char16_t uint16_t
+#define char32_t uint32_t
+
 /*is_itegral*/
 namespace ft
 {
