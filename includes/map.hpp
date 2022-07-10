@@ -369,11 +369,11 @@ namespace ft{
 		typedef T											mapped_type;
 		typedef pair<const Key,T>							value_type;
 		typedef Compare										key_compare;
-		typedef Tree<value_type, Compare, Alloc>				Tree;
+		typedef Tree<value_type, Compare, Alloc>			Tree_alias;
 		///END TYPEDEFS///
 
 	private:
-		Tree _rbt;
+		Tree_alias _rbt;
 		key_compare _tree_comp;
 		///MEMBER CLASS VALUE_CMP///
 		class value_compare : public std::binary_function<value_type,value_type,bool>
@@ -400,10 +400,10 @@ namespace ft{
 		typedef typename allocator_type::const_reference			const_reference;
 		typedef typename allocator_type::pointer					pointer;
 		typedef typename allocator_type::const_pointer				const_pointer;
-		typedef typename Tree::iterator								iterator;
-		typedef typename Tree::const_iterator						const_iterator;
-		typedef typename Tree::reverse_iterator						reverse_iterator;
-		typedef typename Tree::const_reverse_iterator				const_reverse_iterator;
+		typedef typename Tree_alias::iterator						iterator;
+		typedef typename Tree_alias::const_iterator					const_iterator;
+		typedef typename Tree_alias::reverse_iterator				reverse_iterator;
+		typedef typename Tree_alias::const_reverse_iterator			const_reverse_iterator;
 		typedef typename iterator_traits<iterator>::difference_type	difference_type;
 		typedef size_t												size_type;
 		///END TYPEDEFS CONTINUATION///
