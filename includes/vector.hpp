@@ -27,35 +27,35 @@ class vector{
 
 	explicit vector (const allocator_type& alloc = allocator_type()):
 		_alloc(alloc),
-		_start(nullptr),
-		_end(nullptr),
-		_end_capacity(nullptr)
+		_start(NULL),
+		_end(NULL),
+		_end_capacity(NULL)
 	{}
 
 	explicit vector (size_type n, const value_type& val = value_type(),
 						const allocator_type& alloc = allocator_type()):
 		_alloc(alloc),
-		_start(nullptr),
-		_end(nullptr),
-		_end_capacity(nullptr)
+		_start(NULL),
+		_end(NULL),
+		_end_capacity(NULL)
 		{ assign(n, val); }
 
 
 	template <class InputIterator>
-	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = nullptr):
+	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL):
 		_alloc(alloc),
-		_start(nullptr),
-		_end(nullptr),
-		_end_capacity(nullptr)
+		_start(NULL),
+		_end(NULL),
+		_end_capacity(NULL)
 	{
 		reserve(std::distance(first, last));
 		while (first != last)
 			*(_end++) = *(first++);
 	}
 
-	vector (const vector& x) :_start(nullptr),
-		_end(nullptr),
-		_end_capacity(nullptr){
+	vector (const vector& x) :_start(NULL),
+		_end(NULL),
+		_end_capacity(NULL){
 		insert(_end, x._start, x._end);
 	}
 
@@ -157,7 +157,7 @@ class vector{
 
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last,
-	typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = nullptr){
+	typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL){
 		size_type dist = std::distance(first, last);
 		clear();
 		if (dist > capacity())
@@ -217,7 +217,7 @@ class vector{
 
 	template <class InputIterator>
 	void insert (iterator position, InputIterator first, InputIterator last,
-		typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = nullptr){
+		typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL){
 		difference_type pos_insert = position.operator->() - _start;
 		size_type n = std::distance(first, last);
 

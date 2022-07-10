@@ -12,7 +12,7 @@ namespace ft
 		typedef typename std::ptrdiff_t difference_type;
 		typedef std::random_access_iterator_tag iterator_category;
 
-		VectorIter() : _ptr(nullptr) {}
+		VectorIter() : _ptr(NULL) {}
 		VectorIter(pointer ptr) : _ptr(ptr) {}
 		VectorIter(VectorIter const &src) { *this = src; }
 		virtual ~VectorIter() {}
@@ -261,7 +261,7 @@ namespace ft
 		typedef typename std::ptrdiff_t difference_type;
 		typedef std::bidirectional_iterator_tag iterator_category;
 
-		MapIter(node_pointer root) : _Nptr(nullptr), _root(root) {}
+		MapIter(node_pointer root) : _Nptr(NULL), _root(root) {}
 		MapIter(node_pointer Nptr, node_pointer root) : _Nptr(Nptr), _root(root) {}
 		MapIter(MapIter const &src) { *this = src; }
 		virtual ~MapIter() {}
