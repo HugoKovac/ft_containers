@@ -206,16 +206,15 @@ namespace ft{
 		}
 
 	public :
-		// Tree() : _root(NULL), _size(0){}
 		Tree(const key_compare& comp, const allocator_type& alloc) :
 		_root(NULL),
 		_size(0),
 		_comp(comp),
 		_alloc_node(alloc){}
 
-		Tree(Tree const &src) : _root(src._root), _comp(src._comp), _alloc_node(src._alloc_node){}
+		Tree(Tree const &src) : _root(NULL), _comp(src._comp), _alloc_node(src._alloc_node){}
 
-		// ~Tree(){ clear1(); }
+		~Tree(){ clear(_root); }
 
 		Node *newNode(value_type const &val, color_type new_color){
 			return new Node(val, new_color, _alloc_node);

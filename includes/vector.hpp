@@ -229,7 +229,9 @@ class vector{
 			*(rit - n) = *rit;
 			++rit;
 		}
-		*(rit - n) = *rit;
+
+		if (rit != rend())
+			*(rit - n) = *rit;
 
 		for (size_type i = 0; i < n; i++)
 			*(_start + pos_insert + i) = *(first++);
