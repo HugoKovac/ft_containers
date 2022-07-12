@@ -26,6 +26,7 @@ clean:
 fclean: clean
 	rm -rf $(NAME) exec .vscode *.tmp
 
-re: fclean $(NAME)
+re: fclean 
+	make $(NAME)
 
 .PHONY: all, clean, fclean, re, std

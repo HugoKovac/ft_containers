@@ -220,7 +220,7 @@ namespace ft{
 			return new Node(val, new_color, _alloc_node);
 		}
 
-		void clear1(){ clear(_root); }
+		void clear1(){ clear(_root); _root = NULL; }
 
 		void clear(Node *n){
 			if (n == NULL)
@@ -229,6 +229,7 @@ namespace ft{
 				clear(n->right);
 			if (n->left != NULL)
 				clear(n->left);
+			--_size;
 			this->_alloc.destroy(n);
 			this->_alloc.deallocate(n, 1);
 		}

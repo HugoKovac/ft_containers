@@ -14,7 +14,6 @@ void printDataVector(vec begin, vec end){
 }
 
 void vector_test(void){
-	std::cout << COLOR_RED << "Namespace use : " << __NS_S << COLOR_DEFAULT << std::endl;
 	__NS::vector<int> v1(5, -1);
 
 	PRINT_SC(v1);

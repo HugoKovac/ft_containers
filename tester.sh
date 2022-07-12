@@ -3,9 +3,9 @@
 
 make fclean
 mkdir -p exec
-make
+make -j
 mv tester exec/tester_ft
-make std
+make -j std
 mv tester exec/tester_std
 
 start_time=`date +%s%N`
