@@ -296,9 +296,9 @@ namespace ft{
 
 		size_type max_size() const{ return _alloc.max_size(); }
 
-		iterator find (const value_type& val){
+		Node *find (const value_type& val){//! val passe par erase range seg.fault
 			if (!_root)
-				return end();
+				return NULL;
 			else
 			{
 				Node *n = _root;
@@ -307,29 +307,31 @@ namespace ft{
 					if (_comp(val.first, n->value->first))
 					{
 						if (n->left == NULL)
-							return end();
+							return NULL;
 						else
 							n = n->left;
 					}
 					else if (_comp(n->value->first, val.first))
 					{
 						if (n->right == NULL)
-							return end();
+							return NULL;
 						else
 							n = n->right;
 					}
 					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
 						if (!n)
-							return end();
-						return iterator(n, _root);
+							return NULL;
+						return n;
 					}
 				}
 			}
 		}
 
-		const_iterator find (const value_type& val) const{
+		iterator find_inter (const value_type& val){ return iterator(find(val), _root); }
+
+		Node *find (const value_type& val) const{
 			if (!_root)
-				return end();
+				return NULL;
 			else
 			{
 				Node *n = _root;
@@ -338,27 +340,165 @@ namespace ft{
 					if (_comp(val.first, n->value->first))
 					{
 						if (n->left == NULL)
-							return end();
+							return NULL;
 						else
 							n = n->left;
 					}
 					else if (_comp(n->value->first, val.first))
 					{
 						if (n->right == NULL)
-							return end();
+							return NULL;
 						else
 							n = n->right;
 					}
 					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
 						if (!n)
-							return end();
-						return const_iterator(n, _root);
+							return NULL;
+						return n;
 					}
 				}
 			}
 		}
 
+		const_iterator find_inter (const value_type& val)const{ return const_iterator(find(val), _root); }
 
+		void BSTdel(Node *u, Node *v) {
+			if (u->parent == NULL)
+				_root = v;
+			else if (u == u->parent->left)
+				u->parent->left = v;
+			else
+				u->parent->right = v;
+			if (v)
+				v->parent = u->parent;
+		}
+
+		void FixAfterDel(Node *x) {
+			Node *w;
+			if (x){
+				while (x != _root && x->color) {
+					if (x == x->parent->left) {
+						w = x->parent->right;
+						if (!w->color) {
+							w->color = true;
+							w->parent->color = false;
+							_rotate_left(x->parent);
+							w = x->parent->right;
+						}
+						if (w->left->color && w->right->color) {
+							w->color = false;
+							x = x->parent;
+						}
+						else {
+							if (w->right->color) {
+								w->left->color = BLACK;
+								w->color = RED;
+								_rotate_right(w);
+								w = x->parent->right;
+							}
+							w->color = x->parent->color;
+							x->parent->color = BLACK;
+							w->right->color = BLACK;
+							_rotate_left(x->parent);
+							x = _root;
+						}
+					}
+					else {
+						w = x->parent->left;
+						if (!w->color) {
+							w->color = BLACK;
+							w->parent->color = RED;
+							_rotate_right(x->parent);
+							w = x->parent->left;
+						}
+						if (w->right->color && w->left->color) {
+							w->color = RED;
+							x = x->parent;
+						}
+						else {
+							if (w->left->color) {
+								w->right->color = BLACK;
+								w->color = RED;
+								_rotate_left(w);
+								w = x->parent->left;
+							}
+							w->color = x->parent->color;
+							x->parent->color = BLACK;
+							w->left->color = BLACK;
+							_rotate_right(x->parent);
+							x = _root;
+						}
+					}
+				}
+				x->color = BLACK;
+			}
+		}
+
+		bool del(Node *z) {
+			bool delB = false;
+			Node *x;
+			Node *y = z;//z = cpy de v
+			color_type y_color = y->color;
+			if (z->left == NULL) {//si il y a 0 ou 1 enfant a v
+				x = z->right;//x = cpy de u
+				BSTdel(z, z->right);//remplace v par u => y addr morte
+			}
+			else if (z->right == NULL) {//si il y a 0 ou 1 enfant a v
+				x = z->left;//x = cpy de u
+				BSTdel(z, z->left);//remplace v par u => y addr morte
+			}
+			else {//si v a 2 enfants
+				y = _min(z->right);//y = ++z
+				y_color = y->color;//save y color
+				x = y->right;//x = NULL(++y(z + 2))
+				if (x && x->parent && y->parent == z)
+					x->parent = y;
+				else {
+					BSTdel(y, y->right);
+					y->right = z->right;
+					if (y->right && y->right)
+						y->right->parent = y;
+				}
+				BSTdel(z, y);
+				y->left = z->left;
+				y->left->parent = y;
+				y->color = z->color;
+			}
+			if (z != NULL) {
+				_size--;
+				delB = true;
+				_alloc.destroy(z);
+				_alloc.deallocate(z, 1);
+			}
+			if (y_color == BLACK)
+				FixAfterDel(x);
+			return delB;
+		}
+
+		void erase(iterator position) {
+			Node *n = NULL;
+			if (position != end())
+				n = find(*position);
+			if (n)
+				del(n);
+		}
+
+		size_type erase (const value_type& val){
+			Node *n = find(val);
+			if (n)
+				return del(n) == true ? 1 : 0;
+			return 0;
+		}
+
+		void erase_it (iterator first, iterator last){//! first seg. fault sometimes
+			std::cout << "before" << std::endl;
+			while (first.operator->() && first != last){
+				std::cout << "while" << std::endl;
+				erase(first);
+				first++;
+			}
+			std::cout << "after" << std::endl;
+		}
 	};
 
 	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<pair<const Key,T> > >
@@ -461,8 +601,8 @@ namespace ft{
 		key_compare key_comp() const{ return key_compare(); }
 		allocator_type get_allocator() const{ return allocator_type(); }
 
-		iterator find (const key_type& k){ return _rbt.find(make_pair(k, 0)); }
-		const_iterator find (const key_type& k) const{ return _rbt.find(make_pair(k, 0)); }
+		iterator find (const key_type& k){ return _rbt.find_inter(make_pair(k, 0)); }
+		const_iterator find (const key_type& k) const{ return _rbt.find_inter(make_pair(k, 0)); }
 
 		size_type count (const key_type& k) const{ return find(k) != end(); }
 
@@ -474,7 +614,9 @@ namespace ft{
 
 		void clear() { _rbt.clear1(); }
 
+		void erase (iterator position){ _rbt.erase(position); }
+		size_type erase (const key_type& k){ return _rbt.erase(make_pair(k, 0)); }
+		void erase (iterator first, iterator last){ _rbt.erase_it(first, last); }
 	};
-
 }
 #endif // MAP_HPP

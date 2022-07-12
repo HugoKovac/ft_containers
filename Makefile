@@ -1,6 +1,6 @@
 NAME = tester
 CC = c++
-FLAGS = -Wall -Werror -Wextra -Iincludes #-g -O0
+FLAGS = -Wall -Werror -Wextra -Iincludes -g -O0
 SRC = main.cpp vector.cpp map.cpp pair.cpp
 SRCS = $(addprefix sources/, $(SRC))
 OBJS = $(SRC:.cpp=.o)
