@@ -291,6 +291,8 @@ namespace ft
 
 		node_pointer _next(node_pointer n)
 		{
+			if (n == _max(_root))
+				return NULL;
 			if (n->right)
 				return (_min(n->right));
 			node_pointer parent = n->parent;
@@ -299,6 +301,8 @@ namespace ft
 				n = parent;
 				parent = parent->parent;
 			}
+			// std::cout << "address of value : " << reinterpret_cast<void*>(parent) << std::endl;
+			// std::cout << "value of address : " << parent->value->first << std::endl;
 			return (parent);
 		}
 
@@ -319,7 +323,7 @@ namespace ft
 		friend bool operator==(const MapIter &lhs, const MapIter &rhs) { return lhs._Nptr == rhs._Nptr; };
 		friend bool operator!=(const MapIter &lhs, const MapIter &rhs) { return lhs._Nptr != rhs._Nptr; };
 
-		reference operator*() { return *_Nptr->value; }
+		reference operator*() { return _Nptr == NULL ? reinterpret_cast<reference>(NULL) : *_Nptr->value; }
 		reference operator*() const { return *_Nptr->value; }
 
 		MapIter operator++()

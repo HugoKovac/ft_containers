@@ -285,11 +285,11 @@ namespace ft{
 		iterator begin(){ return iterator(_min(_root), _root); }
 		const_iterator begin() const{ return const_iterator(_min(_root), _root); }
 
-		reverse_iterator rbegin(){ return reverse_iterator(end()); }
-		const_reverse_iterator rbegin() const{ return const_reverse_iterator(end()); }
-
 		iterator end(){ return iterator(NULL, _root); }
 		const_iterator end() const{ return const_iterator(NULL, _root); }
+
+		reverse_iterator rbegin(){ return reverse_iterator(end()); }
+		const_reverse_iterator rbegin() const{ return const_reverse_iterator(end()); }
 
 		reverse_iterator rend(){ return reverse_iterator(begin()); }
 		const_reverse_iterator rend() const{ return const_reverse_iterator(begin()); }
@@ -510,17 +510,16 @@ namespace ft{
 
 		iterator lower_bound (const value_type& val){
 			iterator it = begin();
-			iterator ite = end();
-			for (; it != ite; ++it)
+			for (; it != end(); ++it){
 				if (_comp(it->first, val.first) == false)
 					break ;
+			}
 			return (it);
 		}
 
 		const_iterator lower_bound (const value_type& val)const{
 			const_iterator it = begin();
-			const_iterator ite = end();
-			for (; it != ite; ++it)
+			for (; it != end(); ++it)
 				if (_comp(it->first, val.first) == false)
 					break ;
 			return (it);
@@ -528,9 +527,7 @@ namespace ft{
 
 		iterator upper_bound (const value_type& val){
 			iterator it = begin();
-			iterator ite = end();
-			std::cout << val.first << std::endl;
-			for (; it != ite; ++it)
+			for (; it != end(); ++it)
 				if (_comp(it->first, val.first) == true)
 					break ;
 			return (it);
@@ -538,8 +535,7 @@ namespace ft{
 
 		const_iterator upper_bound (const value_type& val)const{
 			const_iterator it = begin();
-			const_iterator ite = end();
-			for (; it != ite; ++it)
+			for (; it != end(); ++it)
 				if (_comp(it->first, val.first) == true)
 					break ;
 			return (it);

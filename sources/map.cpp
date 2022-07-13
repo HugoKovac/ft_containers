@@ -163,14 +163,13 @@ void map_test(void){
 			tmp_it++;
 		}
 	}
-	std::cout << test.lower_bound(10)->first << std::endl;
-	std::cout << test.lower_bound(-10)->first << std::endl;
-	std::cout << test.lower_bound(-100)->first << std::endl;
-	std::cout << "test\n";
-	std::cout << test.lower_bound(1000)->first << std::endl;
+	std::cout << reinterpret_cast<void*>(test.lower_bound(10)->first) << std::endl;
+	std::cout << reinterpret_cast<void*>(test.lower_bound(-10)->first) << std::endl;
+	std::cout << reinterpret_cast<void*>(test.lower_bound(-100)->first) << std::endl;
+	std::cout << reinterpret_cast<void*>(test.lower_bound(1000)->first) << std::endl;
 
-	std::cout << test.upper_bound(10)->first << std::endl;
-	std::cout << test.upper_bound(-10)->first << std::endl;
-	std::cout << test.upper_bound(-100)->first << std::endl;
-	std::cout << test.upper_bound(1000)->first << std::endl;
+	// std::cout << test.upper_bound(10)->first << std::endl;
+	// std::cout << test.upper_bound(-10)->first << std::endl;
+	// std::cout << test.upper_bound(-100)->first << std::endl;
+	// std::cout << test.upper_bound(1000)->first << std::endl;
 }
