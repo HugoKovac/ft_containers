@@ -510,10 +510,9 @@ namespace ft{
 
 		iterator lower_bound (const value_type& val){
 			iterator it = begin();
-			for (; it != end(); ++it){
+			for (; it != end(); ++it)
 				if (_comp(it->first, val.first) == false)
 					break ;
-			}
 			return (it);
 		}
 
@@ -521,7 +520,7 @@ namespace ft{
 			const_iterator it = begin();
 			for (; it != end(); ++it)
 				if (_comp(it->first, val.first) == false)
-					break ;
+					break ; 
 			return (it);
 		}
 

@@ -6,7 +6,7 @@ void map_test(void){
 	std::cout << test.size() << " | " << test.empty() << std::endl;
 
 	for (int i = 0; i < 100; i++)
-		std::cout << test.insert(__NS::make_pair(i, i)).first->first << std::endl;
+		std::cout << test.insert(__NS::make_pair(i, i + 10)).first->first << std::endl;
 
 	std::cout << test.insert(__NS::make_pair(2, 20)).first->second << std::endl;
 	std::cout << test.insert(__NS::make_pair(2, 10000)).first->second << std::endl;
@@ -62,7 +62,7 @@ void map_test(void){
 	}
 
 	{
-		__NS::map<int, int> tmp(test);//! double free in map(map const &src)
+		__NS::map<int, int> tmp(test);
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
@@ -163,13 +163,19 @@ void map_test(void){
 			tmp_it++;
 		}
 	}
-	std::cout << reinterpret_cast<void*>(test.lower_bound(10)->first) << std::endl;
-	std::cout << reinterpret_cast<void*>(test.lower_bound(-10)->first) << std::endl;
-	std::cout << reinterpret_cast<void*>(test.lower_bound(-100)->first) << std::endl;
-	std::cout << reinterpret_cast<void*>(test.lower_bound(1000)->first) << std::endl;
 
-	// std::cout << test.upper_bound(10)->first << std::endl;
-	// std::cout << test.upper_bound(-10)->first << std::endl;
-	// std::cout << test.upper_bound(-100)->first << std::endl;
-	// std::cout << test.upper_bound(1000)->first << std::endl;
+	std::cout << test.lower_bound(10)->first << std::endl;
+	std::cout << test.lower_bound(20)->first << std::endl;
+	std::cout << test.lower_bound(43)->first << std::endl;
+	std::cout << test.lower_bound(1)->first << std::endl;
+	std::cout << (test.lower_bound(10000) == test.end()) << std::endl;
+	std::cout << (test.lower_bound(-10000) == test.end()) << std::endl;
+
+	// std::cout << test.upper_bound(10)->first << std::endl;//! upper_bound don't work yet
+	// std::cout << test.upper_bound(20)->first << std::endl;
+	// std::cout << test.upper_bound(43)->first << std::endl;
+	// std::cout << test.upper_bound(1)->first << std::endl;
+	// std::cout << (test.upper_bound(10000) == test.end()) << std::endl;
+	// std::cout << (test.upper_bound(-10000) == test.end()) << std::endl;
+
 }

@@ -261,8 +261,8 @@ namespace ft
 		typedef typename std::ptrdiff_t difference_type;
 		typedef std::bidirectional_iterator_tag iterator_category;
 
-		MapIter(node_pointer root) : _Nptr(NULL), _root(root) {}
-		MapIter(node_pointer Nptr, node_pointer root) : _Nptr(Nptr), _root(root) {}
+		MapIter(node_pointer root) : _Nptr(NULL), _root(root){}
+		MapIter(node_pointer Nptr, node_pointer root) : _Nptr(Nptr), _root(root){}
 		MapIter(MapIter const &src) { *this = src; }
 		virtual ~MapIter() {}
 
@@ -323,7 +323,7 @@ namespace ft
 		friend bool operator==(const MapIter &lhs, const MapIter &rhs) { return lhs._Nptr == rhs._Nptr; };
 		friend bool operator!=(const MapIter &lhs, const MapIter &rhs) { return lhs._Nptr != rhs._Nptr; };
 
-		reference operator*() { return _Nptr == NULL ? reinterpret_cast<reference>(NULL) : *_Nptr->value; }
+		reference operator*() { return *_Nptr->value; }
 		reference operator*() const { return *_Nptr->value; }
 
 		MapIter operator++()
@@ -359,8 +359,9 @@ namespace ft
 		pointer operator->() const { return &(operator*()); }
 
 	private:
-		node_pointer _Nptr;
-		node_pointer _root;
+		node_pointer	_Nptr;
+		node_pointer	_root;
+		bool			_end;
 	};
 }
 
