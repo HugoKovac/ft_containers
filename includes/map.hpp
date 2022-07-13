@@ -373,66 +373,76 @@ namespace ft{
 				v->parent = u->parent;
 		}
 
-		void FixAfterDel(Node *x) {
-			Node *w;
-			if (x){
-				while (x != _root && x->color) {
-					if (x == x->parent->left) {
-						w = x->parent->right;
-						if (!w->color) {
-							w->color = true;
-							w->parent->color = false;
-							_rotate_left(x->parent);
-							w = x->parent->right;
-						}
-						if (w->left->color && w->right->color) {
-							w->color = false;
-							x = x->parent;
-						}
-						else {
-							if (w->right->color) {
-								w->left->color = BLACK;
-								w->color = RED;
-								_rotate_right(w);
-								w = x->parent->right;
-							}
-							w->color = x->parent->color;
-							x->parent->color = BLACK;
-							w->right->color = BLACK;
-							_rotate_left(x->parent);
-							x = _root;
-						}
-					}
-					else {
-						w = x->parent->left;
-						if (!w->color) {
-							w->color = BLACK;
-							w->parent->color = RED;
-							_rotate_right(x->parent);
-							w = x->parent->left;
-						}
-						if (w->right->color && w->left->color) {
-							w->color = RED;
-							x = x->parent;
-						}
-						else {
-							if (w->left->color) {
-								w->right->color = BLACK;
-								w->color = RED;
-								_rotate_left(w);
-								w = x->parent->left;
-							}
-							w->color = x->parent->color;
-							x->parent->color = BLACK;
-							w->left->color = BLACK;
-							_rotate_right(x->parent);
-							x = _root;
-						}
-					}
-				}
-				x->color = BLACK;
-			}
-		}
+		// void FixAfterDel(Node *x) {
+		// 	Node *w;
+		// 	if (x){
+		// 		while (x != _root && x->color) {
+		// 			if (x == x->parent->left) {
+		// 				if (x->parent && x->parent->right)
+		// 					w = x->parent->right;
+		// 				if (w && w->color == RED) {
+		// 					w->color = true;
+		// 					w->parent->color = false;
+		// 					_rotate_left(x->parent);
+		// 					if (x->parent && x->parent->right)
+		// 						w = x->parent->right;
+		// 				}
+		// 				if (w->left && w->left->color && w->right && w->right->color) {
+		// 					w->color = false;
+		// 					if (x->parent)
+		// 						x = x->parent;
+		// 				}
+		// 				else {
+		// 					if (w->right && w->right->color) {
+		// 						w->left->color = BLACK;
+		// 						w->color = RED;
+		// 						_rotate_right(w);
+		// 						if (x->parent && x->parent->right)
+		// 							w = x->parent->right;
+		// 					}
+		// 					if (w)
+		// 						w->color = x->parent->color;
+		// 					if (x && x->parent)
+		// 						x->parent->color = BLACK;
+		// 					if (w && w->right)
+		// 						w->right->color = BLACK;
+		// 					_rotate_left(x->parent);
+		// 					x = _root;
+		// 				}
+		// 			}
+		// 			else {
+		// 				w = x->parent->left;
+		// 				if (w->color && !w->color) {
+		// 					w->color = BLACK;
+		// 					w->parent->color = RED;
+		// 					_rotate_right(x->parent);
+		// 					if (x->parent && x->parent->right)
+		// 						w = x->parent->left;
+		// 				}
+		// 				if (w->right && w->right->color && w->left && w->left->color) {
+		// 					w->color = RED;
+		// 					if (x->parent && x->parent)
+		// 						x = x->parent;
+		// 				}
+		// 				else {
+		// 					if (w->left && w->left->color) {
+		// 						w->right->color = BLACK;
+		// 						w->color = RED;
+		// 						_rotate_left(w);
+		// 						if (x->parent && x->parent->left)
+		// 							w = x->parent->left;
+		// 					}
+		// 					w->color = x->parent->color;
+		// 					x->parent->color = BLACK;
+		// 					w->left->color = BLACK;
+		// 					_rotate_right(x->parent);
+		// 					x = _root;
+		// 				}
+		// 			}
+		// 		}
+		// 		x->color = BLACK;
+		// 	}
+		// }
 
 		bool del(Node *z) {
 			bool delB = false;
@@ -470,8 +480,9 @@ namespace ft{
 				_alloc.destroy(z);
 				_alloc.deallocate(z, 1);
 			}
-			if (y_color == BLACK)
-				FixAfterDel(x);
+			(void)y_color;//!remove
+			// if (y_color == BLACK)
+			// 	FixAfterDel(x);
 			return delB;
 		}
 
@@ -490,14 +501,48 @@ namespace ft{
 			return 0;
 		}
 
-		void erase_it (iterator first, iterator last){//! first seg. fault sometimes
-			std::cout << "before" << std::endl;
+		void erase_it (iterator first, iterator last){
 			while (first.operator->() && first != last){
-				std::cout << "while" << std::endl;
 				erase(first);
 				first++;
 			}
-			std::cout << "after" << std::endl;
+		}
+
+		iterator lower_bound (const value_type& val){
+			iterator it = begin();
+			iterator ite = end();
+			for (; it != ite; ++it)
+				if (_comp(it->first, val.first) == false)
+					break ;
+			return (it);
+		}
+
+		const_iterator lower_bound (const value_type& val)const{
+			const_iterator it = begin();
+			const_iterator ite = end();
+			for (; it != ite; ++it)
+				if (_comp(it->first, val.first) == false)
+					break ;
+			return (it);
+		}
+
+		iterator upper_bound (const value_type& val){
+			iterator it = begin();
+			iterator ite = end();
+			std::cout << val.first << std::endl;
+			for (; it != ite; ++it)
+				if (_comp(it->first, val.first) == true)
+					break ;
+			return (it);
+		}
+
+		const_iterator upper_bound (const value_type& val)const{
+			const_iterator it = begin();
+			const_iterator ite = end();
+			for (; it != ite; ++it)
+				if (_comp(it->first, val.first) == true)
+					break ;
+			return (it);
 		}
 	};
 
@@ -606,17 +651,29 @@ namespace ft{
 
 		size_type count (const key_type& k) const{ return find(k) != end(); }
 
-		void swap (map& x){
-			map tmp(x);
-			x = *this;
-			*this = tmp;
-		}
+		// void swap (map& x){
+		// 	map<key_type, mapped_type> save;
+		// 	save = x;
+		// 	std::cout << "x => " << x.begin()->first << std::endl;
+		// 	std::cout << "save de this => " << save.begin()->first << std::endl;
+		// 	std::cout << "x => " << x.begin()->first << std::endl;
+		// 	x = *this;
+		// 	*this = save;
+		// 	std::cout << "save de this=> " << save.begin()->first << std::endl;
+		// 	std::cout << "this => " << this->begin()->first << std::endl;
+		// }
 
 		void clear() { _rbt.clear1(); }
 
 		void erase (iterator position){ _rbt.erase(position); }
 		size_type erase (const key_type& k){ return _rbt.erase(make_pair(k, 0)); }
 		void erase (iterator first, iterator last){ _rbt.erase_it(first, last); }
+
+		iterator lower_bound (const key_type& k){ return _rbt.lower_bound(make_pair(k, 0)); }
+		const_iterator lower_bound (const key_type& k) const{ return _rbt.lower_bound(make_pair(k, 0)); }
+
+		iterator upper_bound (const key_type& k){ return _rbt.upper_bound(make_pair(k, 0)); }
+		const_iterator upper_bound (const key_type& k) const{ return _rbt.upper_bound(make_pair(k, 0)); }
 	};
 }
 #endif // MAP_HPP

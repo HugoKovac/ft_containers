@@ -17,7 +17,7 @@ void map_test(void){
 	std::cout << test.size() << " | " << test.empty() << std::endl;
 
 
-	__NS::map<int, int>::iterator save = test.find(10);
+	__NS::map<int, int>::iterator save = test.find(10000);
 	__NS::map<int, int>::iterator save2 = test.find(-10);
 	if (save != test.end())
 		std::cout << save->first << std::endl;
@@ -117,13 +117,13 @@ void map_test(void){
 	// 		tmp_it++;
 	// 	}
 
-	// 	tmp.swap(test);
+	// 	// tmp.swap(test);
 
-	// 	tmp_it = tmp.begin();
-	// 	while (tmp_it != tmp.end()){
-	// 		std::cout << tmp_it->second << std::endl; 
-	// 		tmp_it++;
-	// 	}
+	// 	// tmp_it = tmp.begin();
+	// 	// while (tmp_it != tmp.end()){
+	// 	// 	std::cout << tmp_it->second << std::endl; 
+	// 	// 	tmp_it++;
+	// 	// }
 	// }
 
 	{
@@ -155,7 +155,7 @@ void map_test(void){
 			tmp_it++;
 		}
 
-		// tmp.erase(tmp.begin(), tmp.end());//! erase range seg. fault some times
+		// tmp.erase(tmp.begin(), tmp.end());//! segfault
 
 		tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
@@ -163,4 +163,14 @@ void map_test(void){
 			tmp_it++;
 		}
 	}
+	std::cout << test.lower_bound(10)->first << std::endl;
+	std::cout << test.lower_bound(-10)->first << std::endl;
+	std::cout << test.lower_bound(-100)->first << std::endl;
+	std::cout << "test\n";
+	std::cout << test.lower_bound(1000)->first << std::endl;
+
+	std::cout << test.upper_bound(10)->first << std::endl;
+	std::cout << test.upper_bound(-10)->first << std::endl;
+	std::cout << test.upper_bound(-100)->first << std::endl;
+	std::cout << test.upper_bound(1000)->first << std::endl;
 }
