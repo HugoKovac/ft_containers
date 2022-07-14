@@ -386,62 +386,75 @@ namespace ft{
 				while (x != _root && x->color == BLACK){//en cas de double noir de x et !_root
 					if (x == x->parent->left){//cas ou x est a gauche
 						Node *w = x->parent->right;
-						if(w->color == RED) {//case1
-							w->color = BLACK;
-							x->parent->color = RED;
-							_rotate_left(x->parent);
-							w = x->parent->right;
-						}
-						if(w->left->color == BLACK && w->right->color == BLACK) {//case2
-							w->color = RED;
-							x = x->parent;
-						}
-						else {
-							if(w->right->color == BLACK) {//case 3
-								w->left->color = BLACK;
-								w->color = RED;
-								_rotate_right(w);
+						if (w){
+							if(w->color == RED) {//case1
+								w->color = BLACK;
+								x->parent->color = RED;
+								_rotate_left(x->parent);
 								w = x->parent->right;
-							}//case 3 et 4
-							w->color = x->parent->color;
-							x->parent->color = BLACK;
-							w->right->color = BLACK;
-							_rotate_left(x->parent);
-							x = _root;
+							}
+							if(w->left && w->left->color == BLACK && w->right && w->right->color == BLACK) {//case2
+								w->color = RED;
+								x = x->parent;
+							}
+							else {
+								if(w->right && w->right->color == BLACK) {//case 3
+									if (w->left)
+										w->left->color = BLACK;
+									w->color = RED;
+									_rotate_right(w);
+									w = x->parent->right;
+								}//case 3 et 4
+								w->color = x->parent->color;
+								x->parent->color = BLACK;
+								if (w->right)
+									w->right->color = BLACK;
+								_rotate_left(x->parent);
+								x = _root;
+							}
 						}
+						else
+							break ;
 					}
 					else{//cas ou x est a droite
 						Node *w = x->parent->left;
-						if(w->color == RED) {//case1
-							w->color = BLACK;
-							x->parent->color = RED;
-							_rotate_right(x->parent);
-							w = x->parent->left;
-						}
-						if(w->right->color == BLACK && w->left->color == BLACK) {//case2
-							w->color = RED;
-							x = x->parent;
-						}
-						else {
-							if(w->left->color == BLACK) {//case 3
-								w->right->color = BLACK;
-								w->color = RED;
-								_rotate_left(w);
+						if (w){
+							if(w->color == RED) {//case1
+								w->color = BLACK;
+								x->parent->color = RED;
+								_rotate_right(x->parent);
 								w = x->parent->left;
-							}//case 3 et 4
-							w->color = x->parent->color;
-							x->parent->color = BLACK;
-							w->left->color = BLACK;
-							_rotate_right(x->parent);
-							x = _root;
+							}
+							if(w->right && w->right->color == BLACK && w->left && w->left->color == BLACK) {//case2
+								w->color = RED;
+								x = x->parent;
+							}
+							else {
+								if(w->left && w->left->color == BLACK) {//case 3
+									if (w->right)
+										w->right->color = BLACK;
+									w->color = RED;
+									_rotate_left(w);
+									w = x->parent->left;
+								}//case 3 et 4
+								w->color = x->parent->color;
+								x->parent->color = BLACK;
+								if (w->left)
+									w->left->color = BLACK;
+								_rotate_right(x->parent);
+								x = _root;
+							}
 						}
+						else
+							break;
 					}
 				}
 				x->color = BLACK;//remis a la bonne couleur
 			}
 		}
-
+int g_i = 0;
 		bool del(Node *z) {
+			std::cout << "=> " << g_i++ << std::endl;
 			Node *y = z;//Pour le cas de z == 0 ou 1 enfant
 			Node *x;
 			color_type org_color_y = y->color;//va etre la couleur de x, pour savoir si double noir a la fin
@@ -491,9 +504,10 @@ namespace ft{
 				return del(n) == true ? 1 : 0;
 			return 0;
 		}
-
+// int g_j = 0;
 		void erase_it (iterator first, iterator last){
-			while (first.operator->() && first != last){
+			while (first != last){
+				std::cout << "#> " << first->first  << std::endl;
 				erase(first);
 				first++;
 			}

@@ -157,11 +157,13 @@ void map_test(void){
 
 		tmp.erase(tmp.begin(), tmp.end());//! segfault
 
+		std::cout << "==========\n";
 		tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
 			std::cout << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
+		std::cout << "==========\n";
 	}
 
 	std::cout << test.lower_bound(10)->first << std::endl;
