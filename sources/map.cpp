@@ -155,7 +155,7 @@ void map_test(void){
 			tmp_it++;
 		}
 
-		// tmp.erase(tmp.begin(), tmp.end());//! segfault
+		tmp.erase(tmp.begin(), tmp.end());//! segfault
 
 		tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){

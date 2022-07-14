@@ -362,128 +362,119 @@ namespace ft{
 
 		const_iterator find_inter (const value_type& val)const{ return const_iterator(find(val), _root); }
 
-		void BSTdel(Node *u, Node *v) {
-			if (u->parent == NULL)
-				_root = v;
-			else if (u == u->parent->left)
-				u->parent->left = v;
+		void Transplant(Node *z, Node *x){//x peut etre NULL
+			if (!z->parent)//z == _root
+				_root = x;
+			else if (z == z->parent->left)
+				z->parent->left = x;
 			else
-				u->parent->right = v;
-			if (v)
-				v->parent = u->parent;
+				z->parent->right = x;
+			if (x)//si x !NULL
+				x->parent = z->parent;
 		}
 
-		// void FixAfterDel(Node *x) {
-		// 	Node *w;
-		// 	if (x){
-		// 		while (x != _root && x->color) {
-		// 			if (x == x->parent->left) {
-		// 				if (x->parent && x->parent->right)
-		// 					w = x->parent->right;
-		// 				if (w && w->color == RED) {
-		// 					w->color = true;
-		// 					w->parent->color = false;
-		// 					_rotate_left(x->parent);
-		// 					if (x->parent && x->parent->right)
-		// 						w = x->parent->right;
-		// 				}
-		// 				if (w->left && w->left->color && w->right && w->right->color) {
-		// 					w->color = false;
-		// 					if (x->parent)
-		// 						x = x->parent;
-		// 				}
-		// 				else {
-		// 					if (w->right && w->right->color) {
-		// 						w->left->color = BLACK;
-		// 						w->color = RED;
-		// 						_rotate_right(w);
-		// 						if (x->parent && x->parent->right)
-		// 							w = x->parent->right;
-		// 					}
-		// 					if (w)
-		// 						w->color = x->parent->color;
-		// 					if (x && x->parent)
-		// 						x->parent->color = BLACK;
-		// 					if (w && w->right)
-		// 						w->right->color = BLACK;
-		// 					_rotate_left(x->parent);
-		// 					x = _root;
-		// 				}
-		// 			}
-		// 			else {
-		// 				w = x->parent->left;
-		// 				if (w->color && !w->color) {
-		// 					w->color = BLACK;
-		// 					w->parent->color = RED;
-		// 					_rotate_right(x->parent);
-		// 					if (x->parent && x->parent->right)
-		// 						w = x->parent->left;
-		// 				}
-		// 				if (w->right && w->right->color && w->left && w->left->color) {
-		// 					w->color = RED;
-		// 					if (x->parent && x->parent)
-		// 						x = x->parent;
-		// 				}
-		// 				else {
-		// 					if (w->left && w->left->color) {
-		// 						w->right->color = BLACK;
-		// 						w->color = RED;
-		// 						_rotate_left(w);
-		// 						if (x->parent && x->parent->left)
-		// 							w = x->parent->left;
-		// 					}
-		// 					w->color = x->parent->color;
-		// 					x->parent->color = BLACK;
-		// 					w->left->color = BLACK;
-		// 					_rotate_right(x->parent);
-		// 					x = _root;
-		// 				}
-		// 			}
-		// 		}
-		// 		x->color = BLACK;
-		// 	}
-		// }
+		/*(https://www.codesdope.com/course/data-structures-red-black-trees-deletion/)
+			Soit : 
+			- z le node a supprimer
+			- y le node qui remplace z
+			- x le node qui remplace y
+			- w le frere de x
+			(dans le cas ou z a 1 ou 0 fils : x remplace z. (y = z))
+		*/
+		void FixRules(Node *x){//!verif les NULL possibles
+			if (x){
+				while (x != _root && x->color == BLACK){//en cas de double noir de x et !_root
+					if (x == x->parent->left){//cas ou x est a gauche
+						Node *w = x->parent->right;
+						if(w->color == RED) {//case1
+							w->color = BLACK;
+							x->parent->color = RED;
+							_rotate_left(x->parent);
+							w = x->parent->right;
+						}
+						if(w->left->color == BLACK && w->right->color == BLACK) {//case2
+							w->color = RED;
+							x = x->parent;
+						}
+						else {
+							if(w->right->color == BLACK) {//case 3
+								w->left->color = BLACK;
+								w->color = RED;
+								_rotate_right(w);
+								w = x->parent->right;
+							}//case 3 et 4
+							w->color = x->parent->color;
+							x->parent->color = BLACK;
+							w->right->color = BLACK;
+							_rotate_left(x->parent);
+							x = _root;
+						}
+					}
+					else{//cas ou x est a droite
+						Node *w = x->parent->left;
+						if(w->color == RED) {//case1
+							w->color = BLACK;
+							x->parent->color = RED;
+							_rotate_right(x->parent);
+							w = x->parent->left;
+						}
+						if(w->right->color == BLACK && w->left->color == BLACK) {//case2
+							w->color = RED;
+							x = x->parent;
+						}
+						else {
+							if(w->left->color == BLACK) {//case 3
+								w->right->color = BLACK;
+								w->color = RED;
+								_rotate_left(w);
+								w = x->parent->left;
+							}//case 3 et 4
+							w->color = x->parent->color;
+							x->parent->color = BLACK;
+							w->left->color = BLACK;
+							_rotate_right(x->parent);
+							x = _root;
+						}
+					}
+				}
+				x->color = BLACK;//remis a la bonne couleur
+			}
+		}
 
 		bool del(Node *z) {
-			bool delB = false;
+			Node *y = z;//Pour le cas de z == 0 ou 1 enfant
 			Node *x;
-			Node *y = z;//z = cpy de v
-			color_type y_color = y->color;
-			if (z->left == NULL) {//si il y a 0 ou 1 enfant a v
-				x = z->right;//x = cpy de u
-				BSTdel(z, z->right);//remplace v par u => y addr morte
+			color_type org_color_y = y->color;//va etre la couleur de x, pour savoir si double noir a la fin
+
+			if (!z->left){//si !left donc 1 ou 0 enfant
+				x = z->right;//l'enfant qui va replace z est right (soit Node* soit NULL)
+				Transplant(z, z->right);//on remplace z par x dans l'arbre
 			}
-			else if (z->right == NULL) {//si il y a 0 ou 1 enfant a v
-				x = z->left;//x = cpy de u
-				BSTdel(z, z->left);//remplace v par u => y addr morte
+			else if (!z->right){//si !right donc 1 ou 0 enfant
+				x = z->left;//l'enfant qui va replace z est left (soit Node* soit NULL)
+				Transplant(z, z->left);//on remplace z par x dans l'arbre
 			}
-			else {//si v a 2 enfants
-				y = _min(z->right);//y = ++z
-				y_color = y->color;//save y color
-				x = y->right;//x = NULL(++y(z + 2))
-				if (x && x->parent && y->parent == z)
-					x->parent = y;
-				else {
-					BSTdel(y, y->right);
-					y->right = z->right;
-					if (y->right && y->right)
-						y->right->parent = y;
+			else{//z a 2 enfants
+				y = _min(z->right);//l'ordre de l'arbre est repecté
+				org_color_y = y->color;
+				x = y->right;//l'ordre de l'arbre est repecté, x peut etre NULL
+				if (y->parent == z){//y est enfant direct de z
+					if (x)
+						x->parent = y;
 				}
-				BSTdel(z, y);
-				y->left = z->left;
-				y->left->parent = y;
-				y->color = z->color;
+				else{//y n'est pas enfant direct de z
+					Transplant(y, y->right);//on remplace y par x dans l'arbre mais la var y est tjs y
+					y->right = z->right;//y est decroché et on le recontruit avant de transplant
+					y->right->parent = y;//pour montrer que y est indépendant. y->right pas null car = a z->right
+				}
+				Transplant(z, y);//transplantation de y dans l'arbre a la place de z
+				y->left = z->left;//reprise des caracteristique de z
+				y->left->parent = y;//reprise des caracteristique de z
+				y->color = z->color;//reprise des caracteristique de z
 			}
-			if (z != NULL) {
-				_size--;
-				delB = true;
-				_alloc.destroy(z);
-				_alloc.deallocate(z, 1);
-			}
-			(void)y_color;//!remove
-			// if (y_color == BLACK)
-			// 	FixAfterDel(x);
-			return delB;
+			if (org_color_y == BLACK)//x = noir noir ou noir rouge
+				FixRules(x);//corriger les violation de rule de RBT
+			return true;
 		}
 
 		void erase(iterator position) {
