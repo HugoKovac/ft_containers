@@ -26,9 +26,9 @@ namespace ft{
 		typedef typename allocator_type::size_type				size_type;
 
 		struct Node{
-			typedef bool color_type;
+			// typedef bool color_type;
 
-			color_type color;
+			// color_type color;
 			Node *parent;
 			Node *left;
 			Node *right;
@@ -36,10 +36,10 @@ namespace ft{
 			allocator_type alloc;
 
 			Node(const allocator_type& alloc)
-			: color(RED), parent(NULL), left(NULL), right(NULL), value(NULL), alloc(alloc){}
+			: /*color(RED),*/ parent(NULL), left(NULL), right(NULL), value(NULL), alloc(alloc){}
 
-			Node(value_type const &val, color_type new_color, const allocator_type& alloc)
-			: color(new_color), parent(NULL), left(NULL), right(NULL), value(NULL), alloc(alloc){
+			Node(value_type const &val, /*color_type new_color,*/ const allocator_type& alloc)
+			: /*color(new_color),*/ parent(NULL), left(NULL), right(NULL), value(NULL), alloc(alloc){
 				value = this->alloc.allocate(1);
 				this->alloc.construct(value, val);
 			}
@@ -55,7 +55,7 @@ namespace ft{
 
 	private :
 		typedef typename Alloc::template rebind< Node >::other	allocator_type_node;
-		typedef bool color_type;
+		// typedef bool color_type;
 
 		Node	*_root;
 		size_type _size;
@@ -158,7 +158,7 @@ namespace ft{
 			x->parent = y;
 		}
 
-
+/*
 		void _insert_case4(Node *n){
 			if (n == n->parent->right && n->parent == _grandpa(n)->left){
 				_rotate_left(n->parent);
@@ -204,7 +204,7 @@ namespace ft{
 					_rotate_left(_grandpa(n));
 			}
 		}
-
+*/
 	public :
 		Tree(const key_compare& comp, const allocator_type& alloc) :
 		_root(NULL),
@@ -216,8 +216,8 @@ namespace ft{
 
 		~Tree(){ clear(_root); }
 
-		Node *newNode(value_type const &val, color_type new_color){
-			return new Node(val, new_color, _alloc_node);
+		Node *newNode(value_type const &val/*, color_type new_color*/){
+			return new Node(val, /*new_color,*/ _alloc_node);
 		}
 
 		void clear1(){ clear(_root); _root = NULL; }
@@ -234,7 +234,7 @@ namespace ft{
 			this->_alloc.deallocate(n, 1);
 		}
 
-		pair<iterator,bool> insert(value_type const &val)//?change return type
+		/*pair<iterator,bool> insert(value_type const &val)//?change return type
 		{
 			Node *inserted_node = new Node(val, RED, _alloc_node);
 			if (!_root){
@@ -276,6 +276,32 @@ namespace ft{
 			}
 			_insert_case1(inserted_node);
 			return make_pair(iterator(inserted_node, _root), true);
+		}*/
+
+		pair<iterator,bool> insert(value_type const &val){
+			std::cout << "=========" << std::endl;
+			std::cout << val.first << std::endl;
+			std::cout << val.second << std::endl;
+			std::cout << "=========" << std::endl;
+			Node *insertNode = new Node(val, _alloc);
+			Node *y = NULL;
+			Node *temp = _root;
+			while(temp != NULL) {
+			y = temp;
+			if(_comp(insertNode->value->first, temp->value->first))
+				temp = temp->left;
+			else
+				temp = temp->right;
+			}
+			insertNode->parent = y;
+
+			if(y == NULL)
+				_root = insertNode;
+			else if(_comp(insertNode->value->first, y->value->first))
+				y->left = insertNode;
+			else
+				y->right = insertNode;
+			return make_pair(iterator(insertNode, _root), true);
 		}
 
 		size_type size() const{ return _size; }
@@ -381,83 +407,82 @@ namespace ft{
 			- w le frere de x
 			(dans le cas ou z a 1 ou 0 fils : x remplace z. (y = z))
 		*/
-		void FixRules(Node *x){//!verif les NULL possibles
-			if (x){
-				while (x != _root && x->color == BLACK){//en cas de double noir de x et !_root
-					if (x == x->parent->left){//cas ou x est a gauche
-						Node *w = x->parent->right;
-						if (w){
-							if(w->color == RED) {//case1
-								w->color = BLACK;
-								x->parent->color = RED;
-								_rotate_left(x->parent);
-								w = x->parent->right;
-							}
-							if(w->left && w->left->color == BLACK && w->right && w->right->color == BLACK) {//case2
-								w->color = RED;
-								x = x->parent;
-							}
-							else {
-								if(w->right && w->right->color == BLACK) {//case 3
-									if (w->left)
-										w->left->color = BLACK;
-									w->color = RED;
-									_rotate_right(w);
-									w = x->parent->right;
-								}//case 3 et 4
-								w->color = x->parent->color;
-								x->parent->color = BLACK;
-								if (w->right)
-									w->right->color = BLACK;
-								_rotate_left(x->parent);
-								x = _root;
-							}
-						}
-						else
-							break ;
-					}
-					else{//cas ou x est a droite
-						Node *w = x->parent->left;
-						if (w){
-							if(w->color == RED) {//case1
-								w->color = BLACK;
-								x->parent->color = RED;
-								_rotate_right(x->parent);
-								w = x->parent->left;
-							}
-							if(w->right && w->right->color == BLACK && w->left && w->left->color == BLACK) {//case2
-								w->color = RED;
-								x = x->parent;
-							}
-							else {
-								if(w->left && w->left->color == BLACK) {//case 3
-									if (w->right)
-										w->right->color = BLACK;
-									w->color = RED;
-									_rotate_left(w);
-									w = x->parent->left;
-								}//case 3 et 4
-								w->color = x->parent->color;
-								x->parent->color = BLACK;
-								if (w->left)
-									w->left->color = BLACK;
-								_rotate_right(x->parent);
-								x = _root;
-							}
-						}
-						else
-							break;
-					}
-				}
-				x->color = BLACK;//remis a la bonne couleur
-			}
-		}
-int g_i = 0;
+		// void FixRules(Node *x){//!verif les NULL possibles
+		// 	if (x){
+		// 		while (x != _root && x->color == BLACK){//en cas de double noir de x et !_root
+		// 			if (x == x->parent->left){//cas ou x est a gauche
+		// 				Node *w = x->parent->right;
+		// 				if (w){
+		// 					if(w->color == RED) {//case1
+		// 						w->color = BLACK;
+		// 						x->parent->color = RED;
+		// 						_rotate_left(x->parent);
+		// 						w = x->parent->right;
+		// 					}
+		// 					if(w->left && w->left->color == BLACK && w->right && w->right->color == BLACK) {//case2
+		// 						w->color = RED;
+		// 						x = x->parent;
+		// 					}
+		// 					else {
+		// 						if(w->right && w->right->color == BLACK) {//case 3
+		// 							if (w->left)
+		// 								w->left->color = BLACK;
+		// 							w->color = RED;
+		// 							_rotate_right(w);
+		// 							w = x->parent->right;
+		// 						}//case 3 et 4
+		// 						w->color = x->parent->color;
+		// 						x->parent->color = BLACK;
+		// 						if (w->right)
+		// 							w->right->color = BLACK;
+		// 						_rotate_left(x->parent);
+		// 						x = _root;
+		// 					}
+		// 				}
+		// 				else
+		// 					break ;
+		// 			}
+		// 			else{//cas ou x est a droite
+		// 				Node *w = x->parent->left;
+		// 				if (w){
+		// 					if(w->color == RED) {//case1
+		// 						w->color = BLACK;
+		// 						x->parent->color = RED;
+		// 						_rotate_right(x->parent);
+		// 						w = x->parent->left;
+		// 					}
+		// 					if(w->right && w->right->color == BLACK && w->left && w->left->color == BLACK) {//case2
+		// 						w->color = RED;
+		// 						x = x->parent;
+		// 					}
+		// 					else {
+		// 						if(w->left && w->left->color == BLACK) {//case 3
+		// 							if (w->right)
+		// 								w->right->color = BLACK;
+		// 							w->color = RED;
+		// 							_rotate_left(w);
+		// 							w = x->parent->left;
+		// 						}//case 3 et 4
+		// 						w->color = x->parent->color;
+		// 						x->parent->color = BLACK;
+		// 						if (w->left)
+		// 							w->left->color = BLACK;
+		// 						_rotate_right(x->parent);
+		// 						x = _root;
+		// 					}
+		// 				}
+		// 				else
+		// 					break;
+		// 			}
+		// 		}
+		// 		x->color = BLACK;//remis a la bonne couleur
+		// 	}
+		// }
+
 		bool del(Node *z) {
-			std::cout << "=> " << g_i++ << std::endl;
 			Node *y = z;//Pour le cas de z == 0 ou 1 enfant
 			Node *x;
-			color_type org_color_y = y->color;//va etre la couleur de x, pour savoir si double noir a la fin
+			// color_type org_color_y = y->color;//va etre la couleur de x, pour savoir si double noir a la fin
 
 			if (!z->left){//si !left donc 1 ou 0 enfant
 				x = z->right;//l'enfant qui va replace z est right (soit Node* soit NULL)
@@ -469,7 +494,7 @@ int g_i = 0;
 			}
 			else{//z a 2 enfants
 				y = _min(z->right);//l'ordre de l'arbre est repecté
-				org_color_y = y->color;
+				// org_color_y = y->color;
 				x = y->right;//l'ordre de l'arbre est repecté, x peut etre NULL
 				if (y->parent == z){//y est enfant direct de z
 					if (x)
@@ -483,10 +508,10 @@ int g_i = 0;
 				Transplant(z, y);//transplantation de y dans l'arbre a la place de z
 				y->left = z->left;//reprise des caracteristique de z
 				y->left->parent = y;//reprise des caracteristique de z
-				y->color = z->color;//reprise des caracteristique de z
+				// y->color = z->color;//reprise des caracteristique de z
 			}
-			if (org_color_y == BLACK)//x = noir noir ou noir rouge
-				FixRules(x);//corriger les violation de rule de RBT
+			// if (org_color_y == BLACK)//x = noir noir ou noir rouge
+			// 	FixRules(x);//corriger les violation de rule de RBT
 			return true;
 		}
 
@@ -504,10 +529,8 @@ int g_i = 0;
 				return del(n) == true ? 1 : 0;
 			return 0;
 		}
-// int g_j = 0;
 		void erase_it (iterator first, iterator last){
 			while (first != last){
-				std::cout << "#> " << first->first  << std::endl;
 				erase(first);
 				first++;
 			}
