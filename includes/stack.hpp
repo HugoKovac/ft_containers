@@ -2,7 +2,6 @@
 #define STACK_HPP
 
 #include "vector.hpp"
-#include <iostream>//!remove
 namespace ft {
 
 	template <class T, class Container = ft::vector<T> >
@@ -22,25 +21,25 @@ namespace ft {
 			stack<_T, _Container> const &rhs);
 			
 		protected:
-			Container ctnr;
+			Container c;
 
 		public:
 		
-			explicit stack (const container_type& ctnr = container_type()) : ctnr(ctnr) {}
+			explicit stack (const container_type& c = container_type()) : c(c) {}
 
-			bool empty () const { return (ctnr.empty()); }
-			size_type size() const { return (ctnr.size()); }
-			value_type& top() { return (ctnr.back()); }
-			const value_type& top() const { return (ctnr.back()); }
-			void push (const value_type& val) { ctnr.push_back(val); }
-			void pop() { ctnr.pop_back(); }
+			bool empty () const { return (c.empty()); }
+			size_type size() const { return (c.size()); }
+			value_type& top() { return (c.back()); }
+			const value_type& top() const { return (c.back()); }
+			void push (const value_type& val) { c.push_back(val); }
+			void pop() { c.pop_back(); }
 
 	};
 
 	
 	template <typename T, typename Container>
 	bool operator==(const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
-		return (lhs.ctnr == rhs.ctnr);
+		return (lhs.c == rhs.c);
 	}
 
 	template <class T, class Container>
@@ -50,7 +49,7 @@ namespace ft {
 
 	template <class T, class Container>
 	bool operator<(const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
-		return (lhs.ctnr < rhs.ctnr);
+		return (lhs.c < rhs.c);
 	}
 
 	template <class T, class Container>
