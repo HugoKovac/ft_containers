@@ -61,7 +61,6 @@ namespace ft{
 		compare_type _comp;
 		allocator_type _alloc_node;
 		allocator_type_node _alloc;
-		bool _cpy;
 
 		Node *_min(Node *n) const{
 			Node *tmp;
@@ -163,19 +162,19 @@ namespace ft{
 		_root(NULL),
 		_size(0),
 		_comp(comp),
-		_alloc_node(alloc),
-		_cpy(false){}
+		_alloc_node(alloc){}
 
-		Tree(Tree const &src) : _root(NULL), _comp(src._comp), _alloc_node(src._alloc_node), _cpy(false){}
+		Tree(Tree const &src) : _root(NULL), _comp(src._comp), _alloc_node(src._alloc_node){}
 
-		~Tree(){ if (!_cpy) clear1(); }
+		~Tree(){ clear1(); }
 
 		Tree& operator= (const Tree& x){
-			_root = x._root;
-			_size = x._size;
-			_comp = x._comp;
-			_alloc_node = x._alloc_node;
-			_cpy = true;
+			const_iterator it = x.begin();
+			const_iterator ite = x.end();
+			while (it != ite){
+				insert(*it);
+				it++;
+			}
 			return *this;
 		}
 		
@@ -184,10 +183,8 @@ namespace ft{
 		}
 
 		void clear1(){ 
-			if (!_cpy)
-				clear(_root);
+			clear(_root);
 		 	_root = NULL; 
-			_cpy = false;
 		}
 
 		void clear(Node *n){
@@ -353,8 +350,6 @@ namespace ft{
 			Node *x;
 			// color_type org_color_y = y->color;//va etre la couleur de x, pour savoir si double noir a la fin
 
-			if (z == _root)
-				_cpy = false;
 			if (!z->left){//si !left donc 1 ou 0 enfant
 				x = z->right;//l'enfant qui va replace z est right (soit Node* soit NULL)
 				Transplant(z, z->right);//on remplace z par x dans l'arbre
