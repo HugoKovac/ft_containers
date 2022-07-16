@@ -3,41 +3,41 @@
 void map_test(void){
 	__NS::map<int, int> test;
 
-	std::cout << test.size() << " | " << test.empty() << std::endl;
+	LN << test.size() << " | " << test.empty() << std::endl;
 
 	for (int i = 0; i < 100; i++)
-		std::cout << test.insert(__NS::make_pair(i, i + 10)).first->second << std::endl;
+		LN << test.insert(__NS::make_pair(i, i + 10)).first->second << std::endl;
 
-	std::cout << test.insert(__NS::make_pair(2, 20)).first->second << std::endl;
-	std::cout << test.insert(__NS::make_pair(2, 10000)).first->second << std::endl;
+	LN << test.insert(__NS::make_pair(2, 20)).first->second << std::endl;
+	LN << test.insert(__NS::make_pair(2, 10000)).first->second << std::endl;
 
-	std::cout << (test[3] = 13) << std::endl;
-	std::cout << (test[3] = 13) << std::endl;
+	LN << (test[3] = 13) << std::endl;
+	LN << (test[3] = 13) << std::endl;
 	
-	std::cout << test.size() << " | " << test.empty() << std::endl;
+	LN << test.size() << " | " << test.empty() << std::endl;
 
 
 	__NS::map<int, int>::iterator save = test.find(10000);
 	__NS::map<int, int>::iterator save2 = test.find(-10);
 	if (save != test.end())
-		std::cout << save->first << std::endl;
+		LN << save->first << std::endl;
 	if (save2 != test.end())
-		std::cout << save2->first << std::endl;
+		LN << save2->first << std::endl;
 
 	__NS::map<int, int>::iterator it = test.begin();
 	while (it != test.end()){
-		std::cout << it->second << std::endl; 
+		LN << it->second << std::endl; 
 		it++;
 	}
 
 	__NS::map<int, int>::reverse_iterator rit = test.rbegin();
 	while (rit != test.rend()){
-		std::cout << rit->second << std::endl; 
+		LN << rit->second << std::endl; 
 		rit++;
 	}
 
-	std::cout << test.count(10) << std::endl;
-	std::cout << test.count(-10) << std::endl;
+	LN << test.count(10) << std::endl;
+	LN << test.count(-10) << std::endl;
 
 	{
 		__NS::map<int, int> tmp;
@@ -46,7 +46,7 @@ void map_test(void){
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 	}
@@ -56,7 +56,7 @@ void map_test(void){
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 	}
@@ -66,7 +66,7 @@ void map_test(void){
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 	}
@@ -78,7 +78,7 @@ void map_test(void){
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 	}
@@ -90,7 +90,7 @@ void map_test(void){
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 
@@ -98,7 +98,7 @@ void map_test(void){
 		
 		tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl;
+			LN << tmp_it->second << std::endl;
 			tmp_it++;
 		}
 	}
@@ -113,7 +113,7 @@ void map_test(void){
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 
@@ -121,7 +121,7 @@ void map_test(void){
 
 		tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 	}
@@ -136,7 +136,7 @@ void map_test(void){
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 	}
@@ -151,7 +151,7 @@ void map_test(void){
 
 		__NS::map<int, int>::iterator tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 
@@ -159,28 +159,28 @@ void map_test(void){
 
 		tmp_it = tmp.begin();
 		while (tmp_it != tmp.end()){
-			std::cout << tmp_it->second << std::endl; 
+			LN << tmp_it->second << std::endl; 
 			tmp_it++;
 		}
 	}
 
-	std::cout << test.lower_bound(10)->first << std::endl;
-	std::cout << test.lower_bound(20)->first << std::endl;
-	std::cout << test.lower_bound(43)->first << std::endl;
-	std::cout << test.lower_bound(1)->first << std::endl;
-	std::cout << (test.lower_bound(10000) == test.end()) << std::endl;
-	std::cout << (test.lower_bound(-10000) == test.end()) << std::endl;
+	LN << test.lower_bound(10)->first << std::endl;
+	LN << test.lower_bound(20)->first << std::endl;
+	LN << test.lower_bound(43)->first << std::endl;
+	LN << test.lower_bound(1)->first << std::endl;
+	LN << (test.lower_bound(10000) == test.end()) << std::endl;
+	LN << (test.lower_bound(-10000) == test.end()) << std::endl;
 
-	std::cout << test.upper_bound(10)->first << std::endl;
-	std::cout << test.upper_bound(20)->first << std::endl;
-	std::cout << test.upper_bound(43)->first << std::endl;
-	std::cout << test.upper_bound(1)->first << std::endl;
-	std::cout << (test.upper_bound(10000) == test.end()) << std::endl;
-	std::cout << (test.upper_bound(-10000) == test.end()) << std::endl;
+	LN << test.upper_bound(10)->first << std::endl;
+	LN << test.upper_bound(20)->first << std::endl;
+	LN << test.upper_bound(43)->first << std::endl;
+	LN << test.upper_bound(1)->first << std::endl;
+	LN << (test.upper_bound(10000) == test.end()) << std::endl;
+	LN << (test.upper_bound(-10000) == test.end()) << std::endl;
 
-	std::cout << test.equal_range(10).first->first << std::endl;
-	std::cout << test.equal_range(20).first->second << std::endl;
-	std::cout << test.equal_range(43).second->first << std::endl;
-	std::cout << test.equal_range(1).second->second << std::endl;
+	LN << test.equal_range(10).first->first << std::endl;
+	LN << test.equal_range(20).first->second << std::endl;
+	LN << test.equal_range(43).second->first << std::endl;
+	LN << test.equal_range(1).second->second << std::endl;
 
 }
