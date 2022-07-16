@@ -6,7 +6,6 @@
 #include <memory>
 #include "pair.hpp"
 #include "iterator.hpp"
-#include <iostream>//!remove
 
 #define BLACK true
 #define RED false
@@ -158,53 +157,6 @@ namespace ft{
 			x->parent = y;
 		}
 
-/*
-		void _insert_case4(Node *n){
-			if (n == n->parent->right && n->parent == _grandpa(n)->left){
-				_rotate_left(n->parent);
-				n = n->left;
-			}
-			else
-				_insert_case5(n);
-		}
-
-		void _insert_case3(Node *n){
-			if (_uncle(n) && _uncle(n)->color == RED){
-				n->parent->color = BLACK;
-				_uncle(n)->color = BLACK;
-				_grandpa(n)->color = RED;
-				_insert_case1(_grandpa(n));
-			}
-			else
-				_insert_case4(n);
-		}
-
-		void _insert_case2(Node *n){
-			if (n->parent->color == BLACK)
-				return;
-			_insert_case3(n);
-		}
-
-		void _insert_case1( Node *n){
-			if (!n->parent)
-				n->color = BLACK;
-			else
-				_insert_case2(n);
-		}
-
-
-		void _insert_case5(Node *n){
-			n->parent->color = BLACK;
-			_grandpa(n)->color = RED;
-			if (n == n->parent->left && n->parent == _grandpa(n)->left)
-				_rotate_right(_grandpa(n));
-			else
-			{
-				if (n == n->parent->right && n->parent == _grandpa(n)->right)
-					_rotate_left(_grandpa(n));
-			}
-		}
-*/
 	public :
 		Tree(const key_compare& comp, const allocator_type& alloc) :
 		_root(NULL),
@@ -234,9 +186,9 @@ namespace ft{
 			this->_alloc.deallocate(n, 1);
 		}
 
-		/*pair<iterator,bool> insert(value_type const &val)//?change return type
+		pair<iterator,bool> insert(value_type const &val)
 		{
-			Node *inserted_node = new Node(val, RED, _alloc_node);
+			Node *inserted_node = new Node(val, _alloc_node);
 			if (!_root){
 				_root = inserted_node;
 				++_size;
@@ -274,34 +226,7 @@ namespace ft{
 				++_size;
 				inserted_node->parent = n;
 			}
-			_insert_case1(inserted_node);
 			return make_pair(iterator(inserted_node, _root), true);
-		}*/
-
-		pair<iterator,bool> insert(value_type const &val){
-			std::cout << "=========" << std::endl;
-			std::cout << val.first << std::endl;
-			std::cout << val.second << std::endl;
-			std::cout << "=========" << std::endl;
-			Node *insertNode = new Node(val, _alloc);
-			Node *y = NULL;
-			Node *temp = _root;
-			while(temp != NULL) {
-			y = temp;
-			if(_comp(insertNode->value->first, temp->value->first))
-				temp = temp->left;
-			else
-				temp = temp->right;
-			}
-			insertNode->parent = y;
-
-			if(y == NULL)
-				_root = insertNode;
-			else if(_comp(insertNode->value->first, y->value->first))
-				y->left = insertNode;
-			else
-				y->right = insertNode;
-			return make_pair(iterator(insertNode, _root), true);
 		}
 
 		size_type size() const{ return _size; }
@@ -322,7 +247,7 @@ namespace ft{
 
 		size_type max_size() const{ return _alloc.max_size(); }
 
-		Node *find (const value_type& val){//! val passe par erase range seg.fault
+		Node *find (const value_type& val){
 			if (!_root)
 				return NULL;
 			else
@@ -404,80 +329,8 @@ namespace ft{
 			- z le node a supprimer
 			- y le node qui remplace z
 			- x le node qui remplace y
-			- w le frere de x
 			(dans le cas ou z a 1 ou 0 fils : x remplace z. (y = z))
 		*/
-		// void FixRules(Node *x){//!verif les NULL possibles
-		// 	if (x){
-		// 		while (x != _root && x->color == BLACK){//en cas de double noir de x et !_root
-		// 			if (x == x->parent->left){//cas ou x est a gauche
-		// 				Node *w = x->parent->right;
-		// 				if (w){
-		// 					if(w->color == RED) {//case1
-		// 						w->color = BLACK;
-		// 						x->parent->color = RED;
-		// 						_rotate_left(x->parent);
-		// 						w = x->parent->right;
-		// 					}
-		// 					if(w->left && w->left->color == BLACK && w->right && w->right->color == BLACK) {//case2
-		// 						w->color = RED;
-		// 						x = x->parent;
-		// 					}
-		// 					else {
-		// 						if(w->right && w->right->color == BLACK) {//case 3
-		// 							if (w->left)
-		// 								w->left->color = BLACK;
-		// 							w->color = RED;
-		// 							_rotate_right(w);
-		// 							w = x->parent->right;
-		// 						}//case 3 et 4
-		// 						w->color = x->parent->color;
-		// 						x->parent->color = BLACK;
-		// 						if (w->right)
-		// 							w->right->color = BLACK;
-		// 						_rotate_left(x->parent);
-		// 						x = _root;
-		// 					}
-		// 				}
-		// 				else
-		// 					break ;
-		// 			}
-		// 			else{//cas ou x est a droite
-		// 				Node *w = x->parent->left;
-		// 				if (w){
-		// 					if(w->color == RED) {//case1
-		// 						w->color = BLACK;
-		// 						x->parent->color = RED;
-		// 						_rotate_right(x->parent);
-		// 						w = x->parent->left;
-		// 					}
-		// 					if(w->right && w->right->color == BLACK && w->left && w->left->color == BLACK) {//case2
-		// 						w->color = RED;
-		// 						x = x->parent;
-		// 					}
-		// 					else {
-		// 						if(w->left && w->left->color == BLACK) {//case 3
-		// 							if (w->right)
-		// 								w->right->color = BLACK;
-		// 							w->color = RED;
-		// 							_rotate_left(w);
-		// 							w = x->parent->left;
-		// 						}//case 3 et 4
-		// 						w->color = x->parent->color;
-		// 						x->parent->color = BLACK;
-		// 						if (w->left)
-		// 							w->left->color = BLACK;
-		// 						_rotate_right(x->parent);
-		// 						x = _root;
-		// 					}
-		// 				}
-		// 				else
-		// 					break;
-		// 			}
-		// 		}
-		// 		x->color = BLACK;//remis a la bonne couleur
-		// 	}
-		// }
 
 		bool del(Node *z) {
 			Node *y = z;//Pour le cas de z == 0 ou 1 enfant
@@ -510,8 +363,6 @@ namespace ft{
 				y->left->parent = y;//reprise des caracteristique de z
 				// y->color = z->color;//reprise des caracteristique de z
 			}
-			// if (org_color_y == BLACK)//x = noir noir ou noir rouge
-			// 	FixRules(x);//corriger les violation de rule de RBT
 			return true;
 		}
 
@@ -555,7 +406,7 @@ namespace ft{
 		iterator upper_bound (const value_type& val){
 			iterator it = begin();
 			for (; it != end(); ++it)
-				if (_comp(it->first, val.first) == true)
+				if (_comp(val.first, it->first) == true)
 					break ;
 			return (it);
 		}
@@ -566,6 +417,14 @@ namespace ft{
 				if (_comp(it->first, val.first) == true)
 					break ;
 			return (it);
+		}
+
+		void swap(Tree &x){
+			std::swap(_root, x._root);
+			std::swap(_size, x._size);
+			std::swap(_comp, x._comp);
+			std::swap(_alloc, x._alloc);
+			std::swap(_alloc_node, x._alloc_node);
 		}
 	};
 
@@ -674,17 +533,7 @@ namespace ft{
 
 		size_type count (const key_type& k) const{ return find(k) != end(); }
 
-		// void swap (map& x){
-		// 	map<key_type, mapped_type> save;
-		// 	save = x;
-		// 	std::cout << "x => " << x.begin()->first << std::endl;
-		// 	std::cout << "save de this => " << save.begin()->first << std::endl;
-		// 	std::cout << "x => " << x.begin()->first << std::endl;
-		// 	x = *this;
-		// 	*this = save;
-		// 	std::cout << "save de this=> " << save.begin()->first << std::endl;
-		// 	std::cout << "this => " << this->begin()->first << std::endl;
-		// }
+		void swap (map& x){ _rbt.swap(x._rbt); }
 
 		void clear() { _rbt.clear1(); }
 
@@ -697,6 +546,9 @@ namespace ft{
 
 		iterator upper_bound (const key_type& k){ return _rbt.upper_bound(make_pair(k, 0)); }
 		const_iterator upper_bound (const key_type& k) const{ return _rbt.upper_bound(make_pair(k, 0)); }
+
+		pair<iterator, iterator> equal_range (const key_type& k) { return (ft::make_pair(lower_bound(k), upper_bound(k))); }
+		pair<const_iterator, const_iterator> equal_range (const key_type& k) const { return (ft::make_pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k))); }
 	};
 }
 #endif // MAP_HPP
