@@ -516,6 +516,8 @@ namespace ft{
 			}
 		}
 
+		~map(){ clear(); }
+
 		size_type size() const{ return _rbt.size(); }
 
 		bool empty() const{ return _rbt.empty(); }
