@@ -566,5 +566,48 @@ namespace ft{
 		pair<iterator, iterator> equal_range (const key_type& k) { return (ft::make_pair(lower_bound(k), upper_bound(k))); }
 		pair<const_iterator, const_iterator> equal_range (const key_type& k) const { return (ft::make_pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k))); }
 	};
+
+	template <typename Key, typename T, typename Compare, typename Allocator>
+	bool	operator==(map<Key, T, Compare, Allocator> const &lhs,
+	map<Key, T, Compare, Allocator> const &rhs) {
+		if (lhs.size() != rhs.size())
+			return (false);
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+	}
+
+	template <typename Key, typename T, typename Compare, typename Allocator>
+	bool	operator<(map<Key, T, Compare, Allocator> const &lhs,
+	map<Key, T, Compare, Allocator> const &rhs) {
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+
+	template <typename Key, typename T, typename Compare, typename Allocator>
+	bool	operator!=(map<Key, T, Compare, Allocator> const &lhs,
+	map<Key, T, Compare, Allocator> const &rhs) {
+		return (!(lhs == rhs));
+	}
+
+	template <typename Key, typename T, typename Compare, typename Allocator>
+	bool	operator>(map<Key, T, Compare, Allocator> const &lhs,
+	map<Key, T, Compare, Allocator> const &rhs) {
+		return (rhs < lhs);
+	}
+
+	template <typename Key, typename T, typename Compare, typename Allocator>
+	bool	operator<=(map<Key, T, Compare, Allocator> const &lhs,
+	map<Key, T, Compare, Allocator> const &rhs) {
+		return (!(rhs < lhs));
+	}
+
+	template <typename Key, typename T, typename Compare, typename Allocator>
+	bool	operator>=(map<Key, T, Compare, Allocator> const &lhs,
+	map<Key, T, Compare, Allocator> const &rhs) {
+		return (!(lhs < rhs));
+	}
+
+	template <typename Key, typename T, typename Compare, typename Allocator>
+	void swap(map<Key, T, Compare, Allocator> &lhs, map<Key, T, Compare, Allocator> &rhs) {
+		lhs.swap(rhs);
+	}
 }
 #endif // MAP_HPP
