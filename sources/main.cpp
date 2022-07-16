@@ -5,6 +5,7 @@ int main(){
 	vector_test();
 	pair_test();
 	map_test();
+	stack_test();
 	
 	return 0;
 }

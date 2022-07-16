@@ -15,6 +15,8 @@
 #include "vector.hpp"
 #include <map>
 #include "map.hpp"
+#include <stack>
+#include "stack.hpp"
 
 #define COLOR_RED "\x1B[31m"
 #define COLOR_MAG "\x1B[35m"
@@ -29,5 +31,6 @@
 void vector_test(void);
 void map_test(void);
 void pair_test(void);
+void stack_test(void);
 
 #endif

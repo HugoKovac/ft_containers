@@ -225,10 +225,11 @@ class vector{
 			reserve((size() + n <= capacity() * 2 ? capacity() * 2 : capacity() + n));
 
 		reverse_iterator rit = rbegin();
-		while (rit.operator->() != _start + pos_insert && rit.operator->() > _start + pos_insert){
-			*(rit - n) = *rit;
-			++rit;
-		}
+		if (rit != rend())
+			while (rit.operator->() != _start + pos_insert && rit.operator->() > _start + pos_insert){
+				*(rit - n) = *rit;
+				++rit;
+			}
 
 		if (rit != rend())
 			*(rit - n) = *rit;
