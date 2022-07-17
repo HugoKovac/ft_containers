@@ -6,6 +6,8 @@
 #include <memory>
 #include "pair.hpp"
 #include "iterator.hpp"
+#include "compare.hpp"
+#include "enable_if.hpp"
 
 #define BLACK true
 #define RED false

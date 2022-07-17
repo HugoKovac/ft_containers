@@ -266,6 +266,13 @@ namespace ft
 		MapIter(MapIter const &src) { *this = src; }
 		virtual ~MapIter() {}
 
+		MapIter &operator=(MapIter const &src){
+			_Nptr = src._Nptr;
+			_root = src._root;
+			_end = src._end;
+			return *this;
+		}
+
 	private:
 		node_pointer _min(node_pointer n)
 		{

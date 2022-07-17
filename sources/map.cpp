@@ -12,7 +12,7 @@ void map_test(void){
 	LN << test.insert(__NS::make_pair(2, 10000)).first->second << std::endl;
 
 	LN << (test[3] = 13) << std::endl;
-	LN << (test[3] = 13) << std::endl;
+	LN << (test[3] = 13) << std::endl; 
 	
 	LN << test.size() << " | " << test.empty() << std::endl;
 
@@ -96,10 +96,10 @@ void map_test(void){
 
 		tmp.clear();
 		
-		tmp_it = tmp.begin();
-		while (tmp_it != tmp.end()){
-			LN << tmp_it->second << std::endl;
-			tmp_it++;
+		__NS::map<int, int>::iterator tmp_it2 = tmp.begin();
+		while (tmp_it2 != tmp.end()){
+			LN << tmp_it2->second << std::endl;
+			tmp_it2++;
 		}
 	}
 
@@ -119,10 +119,10 @@ void map_test(void){
 
 		tmp.swap(test);
 
-		tmp_it = tmp.begin();
-		while (tmp_it != tmp.end()){
-			LN << tmp_it->second << std::endl; 
-			tmp_it++;
+		__NS::map<int, int>::iterator tmp_it2 = tmp.begin();
+		while (tmp_it2 != tmp.end()){
+			LN << tmp_it2->second << std::endl; 
+			tmp_it2++;
 		}
 	}
 
@@ -157,10 +157,10 @@ void map_test(void){
 
 		tmp.erase(tmp.begin(), tmp.end());
 
-		tmp_it = tmp.begin();
-		while (tmp_it != tmp.end()){
-			LN << tmp_it->second << std::endl; 
-			tmp_it++;
+		__NS::map<int, int>::iterator tmp_it2 = tmp.begin();
+		while (tmp_it2 != tmp.end()){
+			LN << tmp_it2->second << std::endl; 
+			tmp_it2++;
 		}
 	}
 
@@ -182,5 +182,25 @@ void map_test(void){
 	LN << test.equal_range(20).first->second << std::endl;
 	LN << test.equal_range(43).second->first << std::endl;
 	LN << test.equal_range(1).second->second << std::endl;
+
+	{
+		__NS::map<int, int> one;
+		__NS::map<int, int> two;
+
+		for (int i = 0; i < 100; i++)
+			one.insert(__NS::make_pair(i, i - 100));
+
+		for (int i = 100; i < 200; i++)
+			two.insert(__NS::make_pair(i, i - 100));
+
+		std::cout << std::boolalpha;
+		LN << (one < two) << std::endl;
+		LN << (one > two) << std::endl;
+		LN << (one == two) << std::endl;
+		LN << (one != two) << std::endl;
+		LN << (one >= two) << std::endl;
+		LN << (one <= two) << std::endl;
+		std::cout << std::noboolalpha << std::endl;
+	}
 
 }
