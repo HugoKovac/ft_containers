@@ -9,11 +9,13 @@ namespace ft
 		typedef T value_type;
 		typedef value_type &reference;
 		typedef value_type *pointer;
+		typedef const value_type *const_pointer;
 		typedef typename std::ptrdiff_t difference_type;
 		typedef std::random_access_iterator_tag iterator_category;
 
 		VectorIter() : _ptr(NULL) {}
 		VectorIter(pointer ptr) : _ptr(ptr) {}
+		VectorIter(const_pointer ptr) : _ptr(ptr){}
 		VectorIter(VectorIter const &src) { *this = src; }
 		virtual ~VectorIter() {}
 

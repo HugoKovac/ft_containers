@@ -82,22 +82,6 @@ void vector_test(void){
 	LN << (it <= it2) << std::endl;
 	std::cout << std::noboolalpha << std::endl;
 }
-// //*Iter and const_Iteroperator
-// {
-// 	__NS::vector<int> test2(-10, 10);
-// 	__NS::vector<int>::const_iterator it = test2.begin();
-// 	__NS::vector<int>::iterator it2 = v1.begin() + 2;
-
-// //*Iter relation operator
-// 	std::cout << std::boolalpha;
-// 	LN << (it < it2) << std::endl;
-// 	LN << (it > it2) << std::endl;
-// 	LN << (it == it2) << std::endl;
-// 	LN << (it != it2) << std::endl;
-// 	LN << (it >= it2) << std::endl;
-// 	LN << (it <= it2) << std::endl;
-// 	std::cout << std::noboolalpha << std::endl;
-// }
 //*RevIter operator
 {
 	__NS::vector<int>::reverse_iterator rit = v1.rbegin();
@@ -220,5 +204,13 @@ void vector_test(void){
 	v1.insert(v1.begin(), tmp.begin(), tmp.end());//seg fault
 	PRINT_SC(tmp);
 	printDataVector(tmp.begin(), tmp.end());
+}
+{//*Correction
+	__NS::vector<int> stl(10, 10);
+	__NS::vector<int>::iterator it = stl.begin();
+	__NS::vector<int>::const_iterator it_const = stl.begin() + 2;
+
+	// std::cout << (it < it_const) << std::endl;
+
 }
 }
