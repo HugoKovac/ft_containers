@@ -72,7 +72,7 @@ void vector_test(void){
 	LN << *(it.operator->()) << std::endl;//operator->
 	LN << (it2 - it) << std::endl;//operator- extern
 	LN << ((1 + it) - it) << std::endl;//operator+ extern
-//*RevIter relation operator
+//*Iter relation operator
 	std::cout << std::boolalpha;
 	LN << (it < it2) << std::endl;
 	LN << (it > it2) << std::endl;
@@ -82,6 +82,22 @@ void vector_test(void){
 	LN << (it <= it2) << std::endl;
 	std::cout << std::noboolalpha << std::endl;
 }
+// //*Iter and const_Iteroperator
+// {
+// 	__NS::vector<int> test2(-10, 10);
+// 	__NS::vector<int>::const_iterator it = test2.begin();
+// 	__NS::vector<int>::iterator it2 = v1.begin() + 2;
+
+// //*Iter relation operator
+// 	std::cout << std::boolalpha;
+// 	LN << (it < it2) << std::endl;
+// 	LN << (it > it2) << std::endl;
+// 	LN << (it == it2) << std::endl;
+// 	LN << (it != it2) << std::endl;
+// 	LN << (it >= it2) << std::endl;
+// 	LN << (it <= it2) << std::endl;
+// 	std::cout << std::noboolalpha << std::endl;
+// }
 //*RevIter operator
 {
 	__NS::vector<int>::reverse_iterator rit = v1.rbegin();
