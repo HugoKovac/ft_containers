@@ -210,6 +210,28 @@ void vector_test(void){
 	__NS::vector<int>::iterator it = stl.begin();
 	__NS::vector<int>::const_iterator it_const = stl.begin() + 2;
 
+	LN << (it == it_const) << std::endl;//*comp it and const_it
+	LN << (it != it_const) << std::endl;
 	LN << (it < it_const) << std::endl;
+	LN << (it <= it_const) << std::endl;
+	LN << (it > it_const) << std::endl;
+	LN << (it >= it_const) << std::endl;
+
+	__NS::vector<int> stl2(11, 11);//*it still valid fater swap
+	__NS::vector<int>::iterator it2 = stl2.begin();
+
+	std::cout << *it << std::endl;
+	std::cout << *it2 << std::endl;
+
+	stl.swap(stl2);
+
+	std::cout << *it << std::endl;
+	std::cout << *it2 << std::endl;
+
+	stl.swap(stl2);
+
+	std::cout << *it << std::endl;
+	std::cout << *it2 << std::endl;
+
 }
 }
