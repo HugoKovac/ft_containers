@@ -5,7 +5,7 @@ void map_test(void){
 
 	LN << test.size() << " | " << test.empty() << std::endl;
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 50; i++)
 		LN << test.insert(__NS::make_pair(i, i + 10)).first->second << std::endl;
 
 	LN << test.insert(__NS::make_pair(2, 20)).first->second << std::endl;
@@ -164,14 +164,14 @@ void map_test(void){
 		}
 	}
 
-	LN << test.lower_bound(10)->first << std::endl;
+	LN << (test.lower_bound(10) == test.end()) << std::endl;
 	LN << test.lower_bound(20)->first << std::endl;
 	LN << test.lower_bound(43)->first << std::endl;
 	LN << test.lower_bound(1)->first << std::endl;
 	LN << (test.lower_bound(10000) == test.end()) << std::endl;
 	LN << (test.lower_bound(-10000) == test.end()) << std::endl;
 
-	LN << test.upper_bound(10)->first << std::endl;
+	LN << (test.upper_bound(10) == test.end()) << std::endl;
 	LN << test.upper_bound(20)->first << std::endl;
 	LN << test.upper_bound(43)->first << std::endl;
 	LN << test.upper_bound(1)->first << std::endl;

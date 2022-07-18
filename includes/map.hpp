@@ -181,7 +181,9 @@ namespace ft{
 		}
 		
 		Node *newNode(value_type const &val/*, color_type new_color*/){
-			return new Node(val, /*new_color,*/ _alloc_node);
+			Node *rtn = _alloc.allocate(1);
+			_alloc.construct(rtn, val, _alloc_node);
+			return rtn;
 		}
 
 		void clear1(){ 
@@ -203,7 +205,7 @@ namespace ft{
 
 		pair<iterator,bool> insert(value_type const &val)
 		{
-			Node *inserted_node = new Node(val, _alloc_node);
+			Node *inserted_node = newNode(val);
 			if (!_root){
 				_root = inserted_node;
 				++_size;
@@ -234,7 +236,8 @@ namespace ft{
 							n = n->right;
 					}
 					else if(!_comp(val.first, n->value->first) && !_comp(n->value->first, val.first)){
-						delete inserted_node;
+						_alloc.destroy(inserted_node);
+						_alloc.deallocate(inserted_node, 1);
 						return make_pair(iterator(n, _root), true);
 					}
 				}
@@ -347,6 +350,36 @@ namespace ft{
 			(dans le cas ou z a 1 ou 0 fils : x remplace z. (y = z))
 		*/
 
+		// bool del(Node *z) {
+		// 	if(z->left == NULL) {
+		// 		Transplant(z, z->right);
+		// 		_alloc.destroy(z);
+		// 		_alloc.deallocate(z, 1);
+		// 		return true;
+		// 	}
+		// 	else if(z->right == NULL) {
+		// 		Transplant(z, z->left);
+		// 		_alloc.destroy(z);
+		// 		_alloc.deallocate(z, 1);
+		// 		return true;
+		// 	}
+		// 	else {
+		// 		Node *y = _min(z->right);
+		// 		if(y->parent != z) {
+		// 			Transplant(y, y->right);
+		// 			y->right = z->right;
+		// 			y->right->parent = y;
+		// 		}
+		// 		Transplant(z, y);
+		// 		y->left = z->left;
+		// 		y->left->parent = y;
+		// 		_alloc.destroy(z);
+		// 		_alloc.deallocate(z, 1);
+		// 		return true;
+		// 	}
+		// 	return false;
+		// }
+
 		bool del(Node *z) {
 			Node *y = z;//Pour le cas de z == 0 ou 1 enfant
 			Node *x;
@@ -355,10 +388,16 @@ namespace ft{
 			if (!z->left){//si !left donc 1 ou 0 enfant
 				x = z->right;//l'enfant qui va replace z est right (soit Node* soit NULL)
 				Transplant(z, z->right);//on remplace z par x dans l'arbre
+				_alloc.destroy(z);
+				_alloc.deallocate(z, 1);
+				return true;
 			}
 			else if (!z->right){//si !right donc 1 ou 0 enfant
 				x = z->left;//l'enfant qui va replace z est left (soit Node* soit NULL)
 				Transplant(z, z->left);//on remplace z par x dans l'arbre
+				_alloc.destroy(z);
+				_alloc.deallocate(z, 1);
+				return true;
 			}
 			else{//z a 2 enfants
 				y = _min(z->right);//l'ordre de l'arbre est repecté
@@ -376,9 +415,12 @@ namespace ft{
 				Transplant(z, y);//transplantation de y dans l'arbre a la place de z
 				y->left = z->left;//reprise des caracteristique de z
 				y->left->parent = y;//reprise des caracteristique de z
+				_alloc.destroy(z);
+				_alloc.deallocate(z, 1);
 				// y->color = z->color;//reprise des caracteristique de z
+				return true;
 			}
-			return true;
+			return false;
 		}
 
 		void erase(iterator position) {
