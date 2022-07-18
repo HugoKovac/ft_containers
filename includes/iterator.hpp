@@ -9,15 +9,15 @@ namespace ft
 		typedef T value_type;
 		typedef value_type &reference;
 		typedef value_type *pointer;
-		typedef const value_type *const_pointer;
 		typedef typename std::ptrdiff_t difference_type;
 		typedef std::random_access_iterator_tag iterator_category;
 
 		VectorIter() : _ptr(NULL) {}
 		VectorIter(pointer ptr) : _ptr(ptr) {}
-		VectorIter(const_pointer ptr) : _ptr(ptr){}
 		VectorIter(VectorIter const &src) { *this = src; }
 		virtual ~VectorIter() {}
+
+		operator VectorIter<const T>()const{ return (VectorIter<const T>(this->_ptr)); }
 
 		VectorIter &operator=(VectorIter const &src)
 		{
@@ -77,6 +77,8 @@ namespace ft
 			return *this;
 		}
 
+		pointer base() const { return _ptr; }
+
 		reference operator[](difference_type const n) { return *(_ptr + n); }
 		reference operator[](difference_type const n) const { return *(_ptr + n); }
 		pointer operator->() { return &(this->operator*()); }
@@ -86,16 +88,76 @@ namespace ft
 		pointer _ptr;
 	};
 
-	template <class Iterator>
-	VectorIter<Iterator> operator+(typename VectorIter<Iterator>::difference_type n, const VectorIter<Iterator> &rev_it)
+	template <typename T>
+	bool operator==(const VectorIter<const T> &lhs, const VectorIter<T> &rhs)
 	{
-		return VectorIter<Iterator>(rev_it + n);
+		return (lhs.base() == rhs.base());
 	}
 
-	template <class Iterator>
-	typename VectorIter<Iterator>::difference_type operator-(const VectorIter<Iterator> &lhs, const VectorIter<Iterator> &rhs)
+	template <typename T>
+	bool operator!=(const VectorIter<const T> &lhs, const VectorIter<T> &rhs)
 	{
-		return lhs.operator->() - rhs.operator->();
+		return (lhs.base() != rhs.base());
+	}
+
+	template <typename T>
+	bool operator<(const VectorIter <const T>&lhs, const VectorIter<T> &rhs)
+	{
+		return (lhs.base() < rhs.base());
+	}
+
+	template <typename T>
+	bool operator<=(const VectorIter<const T> &lhs, const VectorIter<T> &rhs)
+	{
+		return (lhs.base() <= rhs.base());
+	}
+
+	template <typename T>
+	bool operator>(const VectorIter<const T> &lhs, const VectorIter<T> &rhs)
+	{
+		return (lhs.base() > rhs.base());
+	}
+
+	template <typename T>
+	bool operator>=(const VectorIter<const T> &lhs, const VectorIter<const T> &rhs)
+	{
+		return (lhs.base() >= rhs.base());
+	}
+
+	template <typename T>
+	bool operator==(const VectorIter<T> &lhs, const VectorIter<const T> &rhs)
+	{
+		return (lhs.base() == rhs.base());
+	}
+
+	template <typename T>
+	bool operator!=(const VectorIter<T> &lhs, const VectorIter<const T> &rhs)
+	{
+		return (lhs.base() != rhs.base());
+	}
+
+	template <typename T>
+	bool operator<(const VectorIter <T>&lhs, const VectorIter<const T> &rhs)
+	{
+		return (lhs.base() < rhs.base());
+	}
+
+	template <typename T>
+	bool operator<=(const VectorIter<T> &lhs, const VectorIter<const T> &rhs)
+	{
+		return (lhs.base() <= rhs.base());
+	}
+
+	template <typename T>
+	bool operator>(const VectorIter<T> &lhs, const VectorIter<const T> &rhs)
+	{
+		return (lhs.base() > rhs.base());
+	}
+
+	template <typename T>
+	bool operator>=(const VectorIter<T> &lhs, const VectorIter<const T> &rhs)
+	{
+		return (lhs.base() >= rhs.base());
 	}
 	/*End of RevIter operators*/
 
@@ -202,6 +264,30 @@ namespace ft
 
 	/*RevIter operators*/
 	template <class Iterator>
+	RevIter<Iterator> operator+(typename RevIter<Iterator>::difference_type n, const RevIter<Iterator> &rev_it)
+	{
+		return RevIter<Iterator>(rev_it + n);
+	}
+
+	template <class Iterator>
+	typename RevIter<Iterator>::difference_type operator-(const RevIter<Iterator> &lhs, const RevIter<Iterator> &rhs)
+	{
+		return rhs.operator->() - lhs.operator->();
+	}
+
+	template <class Iterator>
+	VectorIter<Iterator> operator+(typename VectorIter<Iterator>::difference_type n, const VectorIter<Iterator> &rev_it)
+	{
+		return VectorIter<Iterator>(rev_it + n);
+	}
+
+	template <class Iterator>
+	typename VectorIter<Iterator>::difference_type operator-(const VectorIter<Iterator> &lhs, const VectorIter<Iterator> &rhs)
+	{
+		return lhs.operator->() - rhs.operator->();
+	}
+
+	template <class Iterator>
 	bool operator==(const RevIter<Iterator> &lhs, const RevIter<Iterator> &rhs)
 	{
 		return (lhs.base() == rhs.base());
@@ -237,17 +323,17 @@ namespace ft
 		return (lhs.base() <= rhs.base());
 	}
 
-	template <class Iterator>
-	RevIter<Iterator> operator+(typename RevIter<Iterator>::difference_type n, const RevIter<Iterator> &rev_it)
-	{
-		return RevIter<Iterator>(rev_it + n);
-	}
+	// template <class Iterator>
+	// RevIter<Iterator> operator+(typename RevIter<Iterator>::difference_type n, const RevIter<Iterator> &rev_it)
+	// {
+	// 	return RevIter<Iterator>(rev_it + n);
+	// }
 
-	template <class Iterator>
-	typename RevIter<Iterator>::difference_type operator-(const RevIter<Iterator> &lhs, const RevIter<Iterator> &rhs)
-	{
-		return rhs.operator->() - lhs.operator->();
-	}
+	// template <class Iterator>
+	// typename RevIter<Iterator>::difference_type operator-(const RevIter<Iterator> &lhs, const RevIter<Iterator> &rhs)
+	// {
+	// 	return rhs.operator->() - lhs.operator->();
+	// }
 	/*End of RevIter operators*/
 
 	template <typename N, typename T>

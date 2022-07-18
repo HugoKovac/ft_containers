@@ -22,8 +22,9 @@
 #define COLOR_MAG "\x1B[35m"
 #define COLOR_YEL "\x1B[33m"
 #define COLOR_DEFAULT "\033[0m"
+#define COLOR_GREEN "\x1B[32m"
 
-#define LN std::cout << "line " << COLOR_YEL << __LINE__ << COLOR_DEFAULT << " : "
+#define LN std::cout << COLOR_GREEN<< __FILE__ << COLOR_DEFAULT << " : line " << COLOR_YEL << __LINE__ << COLOR_DEFAULT << " : "
 
 #define PRINT_SC(v) LN << COLOR_MAG << "size : " << v.size() \
 	<< " | capacity " << v.capacity() << COLOR_DEFAULT << std::endl;

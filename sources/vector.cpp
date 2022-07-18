@@ -210,7 +210,6 @@ void vector_test(void){
 	__NS::vector<int>::iterator it = stl.begin();
 	__NS::vector<int>::const_iterator it_const = stl.begin() + 2;
 
-	// std::cout << (it < it_const) << std::endl;
-
+	LN << (it < it_const) << std::endl;
 }
 }
